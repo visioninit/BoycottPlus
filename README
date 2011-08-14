@@ -1,9 +1,9 @@
 "Boycott" Addon
 
 Use cases:  
-	One company can have multiple 'domains' values (array)
-	One company can have multiple tags (array)
-	There can be multiple causes (array)
+    One company can have multiple 'domains' values (array)
+    One company can have multiple tags (array)
+    There can be multiple causes (array)
 
 If the user visits a domain and the pattern matches, a message is displayed across the top of the page simlar to:
 

@@ -1,0 +1,6 @@
+content   boycottplus                 chrome/content/
+skin      boycottplus   classic/1.0   chrome/skin/
+locale    boycottplus   en-US         chrome/locale/en-US/
+resource  boycottplus                 chrome/public/
+
+overlay   chrome://browser/content/browser.xul   chrome://boycottplus/content/overlay.xul

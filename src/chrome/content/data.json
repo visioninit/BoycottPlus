@@ -1,0 +1,27 @@
+﻿{
+    "company": [
+        {
+            "companyId": 0,
+            "companyName": "Boycott Project",
+            "companywikipedia": "https://secure.wikimedia.org/wikipedia/en/wiki/Boycott",
+            "domains": [
+                {
+                    "pattern": "(*.boycottplus.org)"
+                }
+            ],
+            "causes": [
+                101
+            ]
+        }
+    ],
+    
+    "causes": [
+        {
+            "causeId": 101,
+            "causeTitle": "Bad",
+            "causeDescription": "This cause is dedicated to examining things that are bad.  If you don't like bad things, support this cause.",
+            "causeViolation": "This site promoted something bad.",
+            "causeViolationEvidence": "Urls to supplimental material"
+        }
+    ]
+}
