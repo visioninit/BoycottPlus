@@ -28,9 +28,7 @@ Example of JSON input
             "companyName": "Boycott Project",
             "companywikipedia": "https://secure.wikimedia.org/wikipedia/en/wiki/Boycott",
             "domains": [
-                {
-                    "pattern": "(*.boycott.com)"
-                }
+                    "boycott.com"
             ],
             "causes": [
                 101
