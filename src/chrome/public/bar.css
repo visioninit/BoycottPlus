@@ -3,5 +3,22 @@
     top: 0px;
     left: 0px;
     width: 100%;
+    
     background-color: red;
+    padding: 7px;
+}
+
+#boycottIcon {
+    height: 48px;
+    width: 48px;
+    float: left;
+    
+    margin: 10px 10px 5px 5px;
+    background-image: url('resource://boycottplus/icon48.png');
+}
+
+#boycottText {
+    display: inline-block;
+    padding: 5px;
+    font-size: 14px;
 }

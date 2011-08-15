@@ -2,26 +2,42 @@
     "company": [
         {
             "companyId": 0,
-            "companyName": "Boycott Project",
+            "companyName": "Boycottplus Commercial",
             "companywikipedia": "https://secure.wikimedia.org/wikipedia/en/wiki/Boycott",
             "domains": [
-                {
-                    "pattern": "(*.boycottplus.org)"
-                }
+                "boycottplus.com"
             ],
             "causes": [
-                101
+                101, 102
+            ]
+        },
+        {
+            "companyId": 1,
+            "companyName": "Houseplant Guide",
+            "companywikipedia": "http://en.wikipedia.org/wiki/Houseplant",
+            "domains": [
+                "guide-to-houseplants.com",
+                "gflora.com"
+            ],
+            "causes": [
+                102
             ]
         }
     ],
-    
     "causes": [
         {
             "causeId": 101,
-            "causeTitle": "Bad",
-            "causeDescription": "This cause is dedicated to examining things that are bad.  If you don't like bad things, support this cause.",
-            "causeViolation": "This site promoted something bad.",
-            "causeViolationEvidence": "Urls to supplimental material"
+            "causeTitle": "Plant owners",
+            "causeDescription": "This cause is to point out folks that own plants",
+            "causeViolation": "This sites owner has a plant in his room",
+            "causeViolationEvidence": "No evidence"
+        },
+        {
+            "causeId": 102,
+            "causeTitle": "Plant suppliers",
+            "causeDescription": "Those that support plant owners",
+            "causeViolation": "This site sales plant products or information",
+            "causeViolationEvidence": "No evidence"
         }
     ]
 }
