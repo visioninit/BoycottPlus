@@ -1,9 +1,6 @@
 var boycottPlus = {
     
-    data : {
-        domainToCompany : {},
-        causeidToCause : {}
-    },
+    data : null,
     
     $e : function (doc, tag, attr, children) {
         var el = doc.createElement(tag);
@@ -20,34 +17,106 @@ var boycottPlus = {
     
     entry : function () {
         boycottPlus.addLoadHandler();
-        
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "chrome://boycottplus/content/data.json", false);
-        xhr.overrideMimeType("text/plain");
-        xhr.send();
-        var json = JSON.parse(xhr.responseText);
-        
-        boycottPlus.loadData(json);
+        boycottPlus.restoreData();
     },
     
     addLoadHandler : function () {
         gBrowser.addEventListener("DOMContentLoaded", boycottPlus.onPageLoad, true);
     },
     
-    loadData : function (json) {
-        var companies = json["company"];
-        var causes = json["causes"];
+    addSource : function (source, obj) {
+        try {
+            obj = obj.boycott;
+            var companies = obj.company;
+            var causes = obj.causes;
+            
+            boycottPlus.data.tracked[source] = true;
+            
+            for (var i in companies) {
+                if (!companies.hasOwnProperty(i))
+                    continue;
+                
+                var domains = companies[i].domains;
+                for (var j in domains) {
+                    if (!domains.hasOwnProperty(j))
+                        continue;
+                    
+                    companies[i]._src = source;
+                    boycottPlus.data.domainToCompany[domains[j]] = companies[i];
+                }
+            }
+            
+            for (var i in causes) {
+                if (!causes.hasOwnProperty(i))
+                    continue;
+                
+                causes[i]._src = source;
+                boycottPlus.data.causeidToCause[causes[i].causeId] = causes[i];
+            }
+        }
+        catch (e) {
+            if (console && console.log) {
+                console.log("BoycottPlus: " + e);
+            }
+        }
+    },
+    
+    removeSource : function (source) {
+        var domainToCompany = boycottPlus.data.domainToCompany;
+        var causeidToCause = boycottPlus.data.causeidToCause;
         
-        for (var i in companies) {
-            var domains = companies[i].domains;
-            for (var j in domains) {
-                boycottPlus.data.domainToCompany[domains[j]] = companies[i];
+        delete boycottPlus.data.tracked[source];
+        
+        for (var i in domainToCompany) {
+            if (!domainToCompany.hasOwnProperty(i))
+                continue;
+            
+            if (domainToCompany[i]._src === source) {
+                delete domainToCompany[i];
             }
         }
         
-        for (var i in causes) {
-            boycottPlus.data.causeidToCause[causes[i].causeId] = causes[i];
+        for (var i in causeidToCause) {
+            if (!causeidToCause.hasOwnProperty(i))
+                continue;
+            
+            if (causeidToCause[i]._src === source) {
+                delete causeidToCause[i];
+            }
         }
+    },
+    
+    saveData : function () {
+        Components.classes["@mozilla.org/preferences-service;1"]
+            .getService(Components.interfaces.nsIPrefService)
+            .getBranch("extensions.boycottplus.")
+            .setCharPref("data", JSON.stringify(boycottPlus.data));
+    },
+    
+    restoreData : function () {
+        boycottPlus.data = JSON.parse(
+            Components.classes["@mozilla.org/preferences-service;1"]
+                .getService(Components.interfaces.nsIPrefService)
+                .getBranch("extensions.boycottplus.")
+                .getCharPref("data"));
+    },
+    
+    addOrUpdateSource : function (source) {
+        boycottPlus.removeSource(source);
+        
+        var xhr = new XMLHttpRequest();
+        
+        var handler = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var json = JSON.parse(xhr.responseText);
+                boycottPlus.addSource(source, json);
+            }
+        };
+        
+        xhr.open("GET", source);
+        xhr.overrideMimeType("text/plain");
+        xhr.onreadystatechange = handler;
+        xhr.send();
     },
     
     findCompany : function (host) {
