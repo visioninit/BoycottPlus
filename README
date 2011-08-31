@@ -1,47 +1,30 @@
 "Boycott" Addon
+    A value adding proposition
 
-Use cases:  
-    One company can have multiple 'domains' values (array)
-    One company can have multiple tags (array)
-    There can be multiple causes (array)
+updatedDate     - unix timestamp
+company:type    - boycott or buycott
 
-If the user visits a domain and the pattern matches, a message is displayed across the top of the page simlar to:
-
-<div>
-<div left>Boycott: {causeViolation}<br>Company: <a href="{companyWikipedia}">{companyName}</a></div>
-<div right hover={causeDescription}>{causeTitle}</div>
-</div>
-
-If there are 2 or more causes associated with a domain pattern, each causeViolation is presented
-
-<div>
-<div left>Boycott: <span class="bold">Multiple Violations</span><br>{causeViolation[0]}<br>{causeViolation[1]}<br>Company: <a href="{companyWikipedia}">{companyName}</a></div>
-<div right hover={causeDescription}>{causeTitle}</div>
-</div>
-
-Example of JSON input 
 
 {
-    "company": [
-        {
-            "companyId": 0,
-            "companyName": "Boycott Project",
-            "companywikipedia": "https://secure.wikimedia.org/wikipedia/en/wiki/Boycott",
-            "domains": [
-                    "boycott.com"
-            ],
-            "causes": [
-                101
-            ]
-        }
-    ],
-    "causes": [
-        {
-            "causeId": 101,
-            "causeTitle": "Bad",
-            "causeDescription": "This cause is dedicated to examining things that are bad.  If you don't like bad things, support this cause.",
-            "causeViolation": "This site promoted something bad.",
-            "causeViolationEvidence": "Urls to supplimental material"
-        }
-    ]
+    "name" : "Campaign Title",
+	"bcpVersion" : "0.2alpha",
+	"updatedDate" : "",
+	"sponsorName" : "Campaign Author",
+	"sponsorUrl" : "Campaign URL",
+	"company" : [
+		{
+			"companyId" : "##",
+			"companyName" : "Name of Company",
+			"causeEvidence" : "Long string of text containing evidence and references",
+			"learnMore" : "http://learnmoreaddress.com",
+			"type" : "Boycott",
+			"domains" : [
+                "domainpattern1.com",
+                "domainpattern2.com"
+			],
+			"causeDetail" : [
+				"This is the alert message that appears on screen"
+			]
+		}
+	]
 }
