@@ -6,17 +6,22 @@ var boycottPlus = {
         var el = doc.createElement(tag);
         if (attr) {
             for (var i in attr) {
-                el.setAttribute(i, attr[i]);
+                if (attr.hasOwnProperty(i)) {
+                    el.setAttribute(i, attr[i]);
+                }
             }
         }
         if (children) {
-            children.forEach(el.appendChild);
+            children.forEach(function (i) {
+                el.appendChild(i);
+            });
         }
         return el;
     },
     
     entry : function () {
         boycottPlus.addLoadHandler();
+        boycottPlus.registerCSS();
         boycottPlus.restoreData();
     },
     
@@ -24,11 +29,21 @@ var boycottPlus = {
         gBrowser.addEventListener("DOMContentLoaded", boycottPlus.onPageLoad, true);
     },
     
+    registerCSS : function () {
+        var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"]
+                            .getService(Components.interfaces.nsIStyleSheetService);
+        var ios = Components.classes["@mozilla.org/network/io-service;1"]
+                            .getService(Components.interfaces.nsIIOService);
+        var uri = ios.newURI("chrome://boycottplus/skin/bar.css", null, null);
+        if (!sss.sheetRegistered(uri, sss.USER_SHEET)) {
+            sss.loadAndRegisterSheet(uri, sss.USER_SHEET);
+        }
+    },
+    
     addSource : function (source, obj) {
         try {
-            obj = obj.boycott;
-            var companies = obj.company;
-            var causes = obj.causes;
+            var boycott = obj.boycott;
+            var companies = boycott.company;
             
             boycottPlus.data.tracked[source] = true;
             
@@ -42,17 +57,15 @@ var boycottPlus = {
                         continue;
                     
                     companies[i]._src = source;
-                    boycottPlus.data.domainToCompany[domains[j]] = companies[i];
+                    companies[i]._boycott = boycott;
+                    if (boycottPlus.data.domainToCompanies[domains[j]])
+                        boycottPlus.data.domainToCompanies[domains[j]].push(companies[i]);
+                    else
+                        boycottPlus.data.domainToCompanies[domains[j]] = [companies[i]];
                 }
             }
             
-            for (var i in causes) {
-                if (!causes.hasOwnProperty(i))
-                    continue;
-                
-                causes[i]._src = source;
-                boycottPlus.data.causeidToCause[causes[i].causeId] = causes[i];
-            }
+            delete boycott.company;
         }
         catch (e) {
             if (console && console.log) {
@@ -62,28 +75,26 @@ var boycottPlus = {
     },
     
     removeSource : function (source) {
-        var domainToCompany = boycottPlus.data.domainToCompany;
-        var causeidToCause = boycottPlus.data.causeidToCause;
+        var domainToCompanies = boycottPlus.data.domainToCompanies;
         
         delete boycottPlus.data.tracked[source];
         
-        for (var i in domainToCompany) {
-            if (!domainToCompany.hasOwnProperty(i))
+        for (var i in domainToCompanies) {
+            if (!domainToCompanies.hasOwnProperty(i))
                 continue;
+
+            var companylist = domainToCompanies[i];
+            for (var j = 0; j < companylist.length; ++j) {
+                if (companylist[j]._src === source) {
+                    companylist.splice(j, 1);
+                }
+            }
             
-            if (domainToCompany[i]._src === source) {
-                delete domainToCompany[i];
+            if (companylist.length === 0) {
+                delete domainToCompanies[i];
             }
         }
         
-        for (var i in causeidToCause) {
-            if (!causeidToCause.hasOwnProperty(i))
-                continue;
-            
-            if (causeidToCause[i]._src === source) {
-                delete causeidToCause[i];
-            }
-        }
     },
     
     saveData : function () {
@@ -107,7 +118,7 @@ var boycottPlus = {
         var xhr = new XMLHttpRequest();
         
         var handler = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
+            if (xhr.readyState === 4 && (source.search(/^http/) === -1 /* remove this condition, temporary hack! */ || xhr.status === 200)) {
                 var json = JSON.parse(xhr.responseText);
                 boycottPlus.addSource(source, json);
             }
@@ -119,12 +130,12 @@ var boycottPlus = {
         xhr.send();
     },
     
-    findCompany : function (host) {
+    findCompanies : function (host) {
         var arr = host.split(".");
         
         while (arr.length > 1) {
-            var value = boycottPlus.data.domainToCompany[arr.join(".")];
-            if (value) {
+            var value = boycottPlus.data.domainToCompanies[arr.join(".")];
+            if (value && value.length) {
                 return value;
             }
             arr.shift();
@@ -143,44 +154,43 @@ var boycottPlus = {
             return; // do not handle frames/iframes
         }
         
-        var company = boycottPlus.findCompany(doc.location.host);
+        // if there already is a bar, remove it
+        var browser = gBrowser.getBrowserForDocument(doc);
+        var notification = gBrowser.getNotificationBox(browser);
+        var currentBar = notification.querySelector("#boycottPlusBar");
+        if (currentBar) {
+            currentBar.parentNode.removeChild(currentBar);
+        }
         
-        if (company) {
-            boycottPlus.addBar(doc, company);
+        var companies = boycottPlus.findCompanies(doc.location.host);
+        
+        if (companies) {
+            boycottPlus.addBar(notification, companies);
         }
 
     },
     
-    addBar : function (doc, company) {
-        var icon = boycottPlus.$e(doc, "span", { id : "boycottIcon" });
-        var close = boycottPlus.$e(doc, "div", { id : "boycottButton" });
+    addBar : function (notification, companies) {
+        var doc = document; // use the global document, ignore doc
+        var $ = boycottPlus.$e.bind(doc, doc);
         
-        var causes = company.causes.map(function (i) { return boycottPlus.data.causeidToCause[i]; });
-        var causeTitles = causes.map(function (i) { return i.causeTitle; });
-        var causeViolations = causes.map(function (i) { return i.causeViolation; });
+        var currentBar = notification.querySelector("#boycottPlusBar");
+        if (currentBar) {
+            currentBar.parentNode.removeChild(currentBar);
+        }
         
-        var lines = [];
-        lines.push(doc.createTextNode(
-                company.companyName + " is in violation of cause(s): " + causeTitles.join(", ")
-            ));
+        var company = companies[0]; // use only the first company for now
+        var listItems = company.causeDetail
+                            .map(function (i) { return doc.createTextNode(i); })
+                            .map(function (i) { var li = doc.createElement("li"); li.appendChild(i); return li; });
         
-        lines.push(boycottPlus.$e(doc, "ul", {},
-                causeViolations.map(function (i) {
-                    return boycottPlus.$e(doc, "li", {}, [doc.createTextNode(i)])
-                })
-            ));
+        var bar = 
+            $("box", { "id" : "boycottPlusBar" }, [
+                $("ul", {}, listItems)
+            ]);
         
-        var text = boycottPlus.$e(doc, "span", { id : "boycottText" }, lines);
+        notification.insertBefore(bar, notification.firstChild);
         
-        var bar = boycottPlus.$e(doc, "div", { id : "boycottBar" }, [icon, text, close]);
-        
-        var css = boycottPlus.$e(doc, "link", {
-                "type" : "text/css",
-                "rel" : "stylesheet",
-                "href" : "resource://boycottplus/bar.css"
-            });
-        doc.body.appendChild(bar);
-        doc.querySelector("head").appendChild(css);
     }
 };
 

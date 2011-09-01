@@ -1,1 +1,1 @@
-pref("extensions.boycottplus.data", '{ "domainToCompany" : { }, "causeidToCause" : { }, "tracked" : { } }');
+pref("extensions.boycottplus.data", '{ "domainToCompanies" : { }, "tracked" : { } }');

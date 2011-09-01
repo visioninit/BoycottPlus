@@ -14,7 +14,7 @@
     float: left;
     
     margin: 10px 10px 5px 5px;
-    background-image: url('resource://boycottplus/icon48.png');
+    background-image: url('chrome://boycottplus/skin/icon48.png');
 }
 
 #boycottText {
