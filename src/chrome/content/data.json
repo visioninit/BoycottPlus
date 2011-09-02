@@ -1,40 +1,38 @@
 ﻿{
-    "boycott": { 
-        "name": "Test boycott 4", 
-        "source": "https://buycottplus.org/sample4.bcp", 
-        "bcpVersion": "0.2a", 
-        "updatedDate": "1313429013", 
-        "sponsorName": "Design Intentional", 
-        "sponsorUrl": "http://designintentional.com", 
-        "company": [ 
-            { 
-                "companyId": 0, 
-                "companyName": "Boycottplus Commercial", 
-                "causeEvidence": "text area", 
-                "learnMore" : "http://google.com", 
-                "domains": [ 
-                    "boycottplus.com" 
-                ], 
-                "causeDetail": [ 
-                    "Message 1", 
-                    "Message 2" 
-                ], 
-                "type": "boycott"
-            }, 
-            { 
-                "companyId": 1, 
-                "companyName": "Houseplant Guide", 
-                "causeEvidence": "text area", 
-                "learnMore" : "http://google.com", 
-                "domains": [ 
-                    "guide-tRevision (no Causes) o-houseplants.com", 
-                    "gflora.com" 
-                ], 
-                "causeDetail": [ 
-                    "Message1" 
-                ], 
-                "type": "buycott" 
-            } 
-        ] 
-    } 
+    "name": "Test boycott 4", 
+    "source": "https://buycottplus.org/sample4.bcp", 
+    "bcpVersion": "0.2a", 
+    "updatedDate": "1313429013", 
+    "sponsorName": "Design Intentional", 
+    "sponsorUrl": "http://designintentional.com", 
+    "company": [ 
+        { 
+            "companyId": 0, 
+            "companyName": "Boycottplus Commercial", 
+            "causeEvidence": "text area", 
+            "learnMore" : "http://google.com", 
+            "domains": [ 
+                "boycottplus.org" 
+            ], 
+            "causeDetail": [ 
+                "Message 1", 
+                "Message 2" 
+            ], 
+            "type": "boycott"
+        }, 
+        { 
+            "companyId": 1, 
+            "companyName": "Houseplant Guide", 
+            "causeEvidence": "text area", 
+            "learnMore" : "http://google.com", 
+            "domains": [ 
+                "guide-to-houseplants.com", 
+                "gflora.com" 
+            ], 
+            "causeDetail": [ 
+                "Message1" 
+            ], 
+            "type": "buycott" 
+        } 
+    ] 
 }

@@ -42,7 +42,7 @@ var boycottPlus = {
     
     addSource : function (source, obj) {
         try {
-            var boycott = obj.boycott;
+            var boycott = obj;
             var companies = boycott.company;
             
             boycottPlus.data.tracked[source] = true;
