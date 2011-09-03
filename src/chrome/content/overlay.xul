@@ -1,5 +1,16 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
 <overlay id="boycottplus-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-    <script src="bar.js" />
+    <script src="entry.js" />
+    <script src="barAdder/bar.js" />
+    <script src="dataManager/data.js" />
+    <script src="tools/tools.js" />
+    <script src="exit.js" />
+    
+    <!-- <toolbarpalette id="BrowserToolbarPalette">
+        <toolbarbutton id="myextension-button" class="toolbarbutton-1"
+            label="&toolbarbutton.label;" tooltiptext="&toolbarbutton.tooltip;"
+            oncommand="boycottPlus.onToolbarButtonCommand(event);"/>
+    </toolbarpalette> -->
+
 </overlay>
