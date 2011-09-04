@@ -1,6 +1,12 @@
 ﻿boycottPlus.data = {
     
-    _data : null,
+    get _data() {
+        return Application.storage.get("data", null);
+    },
+    
+    set _data(newdata) {
+        Application.storage.set("data", newdata);
+    },
     
     _addSource : function (source, obj) {
         try {
@@ -45,6 +51,8 @@
             if (xhr.readyState === 4 && (source.search(/^http/) === -1 /* remove this condition, temporary hack! */ || xhr.status === 200)) {
                 var json = JSON.parse(xhr.responseText);
                 boycottPlus.data._addSource(source, json);
+                boycottPlus.tools.broadcast("UpdateEntry", "event", JSON.stringify([json.name, source]));
+                boycottPlus.data.saveData();
             }
         };
         
@@ -75,21 +83,17 @@
             }
         }
         
+        boycottPlus.data.saveData();
     },
     
     saveData : function () {
-        Components.classes["@mozilla.org/preferences-service;1"]
-            .getService(Components.interfaces.nsIPrefService)
-            .getBranch("extensions.boycottplus.")
-            .setCharPref("data", JSON.stringify(boycottPlus.data._data));
+        Application.prefs.setValue("extensions.boycottplus.data", JSON.stringify(boycottPlus.data._data));
     },
     
     restoreData : function () {
-        boycottPlus.data._data = JSON.parse(
-            Components.classes["@mozilla.org/preferences-service;1"]
-                .getService(Components.interfaces.nsIPrefService)
-                .getBranch("extensions.boycottplus.")
-                .getCharPref("data"));
+        if (boycottPlus.data._data === null) {
+            boycottPlus.data._data = JSON.parse(Application.prefs.get("extensions.boycottplus.data").value);
+        }
     }
 
 };

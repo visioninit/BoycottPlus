@@ -2,10 +2,27 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 
 <window id="boycottPlusManager"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-         
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  
   <script type="application/x-javascript" src="chrome://boycottplus/content/managerUI/manager.js" />
   
-  <!-- elements here -->
-  
+  <vbox flex="1">
+    <tree id="tree3" flex="1" hidecolumnpicker="true" enableColumnDrag="true" seltype="single" >
+      <treecols>
+        <treecol id="name3" flex="1" label="Name" />
+        <splitter class="tree-splitter" />
+        <treecol id="sex3" flex="1" label="Source"  />
+      </treecols>
+
+      <treechildren>
+      </treechildren>
+    </tree>
+    
+    <hbox>
+      <button label="Add" oncommand="onAddClicked()" />
+      <button label="Remove" oncommand="onRemoveClicked()" />
+      <button label="Modify" oncommand="onModifyClicked()" />
+    </hbox>
+  </vbox>
+
 </window>
