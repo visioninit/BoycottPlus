@@ -1,4 +1,8 @@
-﻿boycottPlus.tools = {
+var EXPORTED_SYMBOLS = ["tools"];
+
+Components.utils.import("resource://boycottplus/modules/data.jsm");
+
+var tools = {
     registerCSS : function () {
         var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"]
                             .getService(Components.interfaces.nsIStyleSheetService);
@@ -14,7 +18,7 @@
               .getService(Components.interfaces.nsIObserverService),
     
     broadcast : function (subject, channel, data) {
-        boycottPlus.tools._obs.notifyObservers(null, "boycottPlus" + channel, JSON.stringify([subject, data]));  
+        tools._obs.notifyObservers(null, "boycottPlus" + channel, JSON.stringify([subject, data]));  
     },
     
     addObserver : function (func, channel) {
@@ -22,23 +26,25 @@
                 var arr = JSON.parse(dat);
                 func(arr[0], top, arr[1]);
             } }, channel];
-        boycottPlus.tools._obs.addObserver(handle[0], "boycottPlus" + channel, false);
+        tools._obs.addObserver(handle[0], "boycottPlus" + channel, false);
         return handle;
     },
     
     removeObserver : function (handle) {
-        boycottPlus.tools._obs.removeObserver(handle[0], handle[1]);
+        tools._obs.removeObserver(handle[0], handle[1]);
     },
     
     openManager : function () {
-        window.open('chrome://boycottplus/content/managerUI/manager.xul', 'boycottPlusManagerWindow', 'height=450,width=520,resizable=yes,dialog=yes,alwaysRaised=yes,titlebar=yes')
+        var ww = Components.classes["@mozilla.org/embedcomp/window-watcher;1"]
+                   .getService(Components.interfaces.nsIWindowWatcher);
+        ww.openWindow('chrome://boycottplus/content/managerUI/manager.xul', 'boycottPlusManagerWindow', 'height=450,width=520,resizable=yes,dialog=yes,alwaysRaised=yes,titlebar=yes')
     },
     
     findCompanies : function (host) {
         var arr = host.split(".");
         
         while (arr.length > 1) {
-            var value = boycottPlus.data._data.domainToCompanies[arr.join(".")];
+            var value = data._data.domainToCompanies[arr.join(".")];
             if (value && value.length) {
                 return value;
             }

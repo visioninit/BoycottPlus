@@ -1,9 +1,14 @@
-boycottPlus.bar = {
+var EXPORTED_SYMBOLS = ["bar"];
+
+Components.utils.import("resource://boycottplus/modules/tools.jsm");
+
+var bar = {
 
     onPageLoad : function (ev) {
         var doc = ev.originalTarget;
+        var win = doc.defaultView;
         
-        if (!(doc instanceof HTMLDocument)) {
+        if (!win || !win.HTMLDocument || !(doc instanceof win.HTMLDocument)) {
             return; // handle html documents only
         }
         
@@ -12,6 +17,7 @@ boycottPlus.bar = {
         }
         
         // if there already is a bar, remove it
+        var gBrowser = this;
         var browser = gBrowser.getBrowserForDocument(doc);
         var notification = gBrowser.getNotificationBox(browser);
         var currentBar = notification.querySelector("#boycottPlusBar");
@@ -19,16 +25,16 @@ boycottPlus.bar = {
             currentBar.parentNode.removeChild(currentBar);
         }
         
-        var companies = boycottPlus.tools.findCompanies(doc.location.host);
+        var companies = tools.findCompanies(doc.location.host);
         
         if (companies) {
-            boycottPlus.bar._addBar(notification, companies);
+            bar._addBar(notification, companies);
         }
     },
     
     _addBar : function (notification, companies) {
         var doc = document; // use the global document, ignore doc
-        var $ = boycottPlus.tools.$e.bind(doc, doc);
+        var $ = tools.$e.bind(doc, doc);
         
         var currentBar = notification.querySelector("#boycottPlusBar");
         if (currentBar) {

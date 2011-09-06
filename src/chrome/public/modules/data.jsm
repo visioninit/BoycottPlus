@@ -1,19 +1,20 @@
-﻿boycottPlus.data = {
+var EXPORTED_SYMBOLS = ["data"];
+
+Components.utils.import("resource://boycottplus/modules/tools.jsm");
+
+var Application = Components.classes["@mozilla.org/fuel/application;1"]
+                      .getService(Components.interfaces.fuelIApplication);
+
+var data = {
     
-    get _data() {
-        return Application.storage.get("data", null);
-    },
-    
-    set _data(newdata) {
-        Application.storage.set("data", newdata);
-    },
+    _data : null,
     
     _addSource : function (source, obj) {
         try {
             var boycott = obj;
             var companies = boycott.company;
             
-            boycottPlus.data._data.tracked[source] = boycott;
+            data._data.tracked[source] = boycott;
             
             for (var i in companies) {
                 if (!companies.hasOwnProperty(i))
@@ -26,10 +27,10 @@
                     
                     companies[i]._src = source;
                     companies[i]._boycott = boycott;
-                    if (boycottPlus.data._data.domainToCompanies[domains[j]])
-                        boycottPlus.data._data.domainToCompanies[domains[j]].push(companies[i]);
+                    if (data._data.domainToCompanies[domains[j]])
+                        data._data.domainToCompanies[domains[j]].push(companies[i]);
                     else
-                        boycottPlus.data._data.domainToCompanies[domains[j]] = [companies[i]];
+                        data._data.domainToCompanies[domains[j]] = [companies[i]];
                 }
             }
             
@@ -43,16 +44,16 @@
     },
     
     addOrUpdateSource : function (source) {
-        boycottPlus.data.removeSource(source);
+        data.removeSource(source);
         
         var xhr = new XMLHttpRequest();
         
         var handler = function() {
             if (xhr.readyState === 4 && (source.search(/^http/) === -1 /* remove this condition, temporary hack! */ || xhr.status === 200)) {
                 var json = JSON.parse(xhr.responseText);
-                boycottPlus.data._addSource(source, json);
-                boycottPlus.tools.broadcast("UpdateEntry", "event", JSON.stringify([json.name, source]));
-                boycottPlus.data.saveData();
+                data._addSource(source, json);
+                tools.broadcast("UpdateEntry", "event", JSON.stringify([json.name, source]));
+                data.saveData();
             }
         };
         
@@ -63,9 +64,9 @@
     },
     
     removeSource : function (source) {
-        var domainToCompanies = boycottPlus.data._data.domainToCompanies;
+        var domainToCompanies = data._data.domainToCompanies;
         
-        delete boycottPlus.data._data.tracked[source];
+        delete data._data.tracked[source];
         
         for (var i in domainToCompanies) {
             if (!domainToCompanies.hasOwnProperty(i))
@@ -83,16 +84,16 @@
             }
         }
         
-        boycottPlus.data.saveData();
+        data.saveData();
     },
     
     saveData : function () {
-        Application.prefs.setValue("extensions.boycottplus.data", JSON.stringify(boycottPlus.data._data));
+        Application.prefs.setValue("extensions.boycottplus.data", JSON.stringify(data._data));
     },
     
     restoreData : function () {
-        if (boycottPlus.data._data === null) {
-            boycottPlus.data._data = JSON.parse(Application.prefs.get("extensions.boycottplus.data").value);
+        if (data._data === null) {
+            data._data = JSON.parse(Application.prefs.get("extensions.boycottplus.data").value);
         }
     }
 

@@ -2,9 +2,6 @@
 
 <overlay id="boycottplus-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <script src="entry.js" />
-    <script src="barAdder/bar.js" />
-    <script src="dataManager/data.js" />
-    <script src="tools/tools.js" />
     <script src="exit.js" />
     
     <menupopup id="menu_ToolsPopup">
