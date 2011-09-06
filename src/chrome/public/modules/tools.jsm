@@ -34,10 +34,24 @@ var tools = {
         tools._obs.removeObserver(handle[0], handle[1]);
     },
     
+    _ww : Components.classes["@mozilla.org/embedcomp/window-watcher;1"]
+                   .getService(Components.interfaces.nsIWindowWatcher),
+    
+    _wm : Components.classes["@mozilla.org/appshell/window-mediator;1"]
+                    .getService(Components.interfaces.nsIWindowMediator),
+    
     openManager : function () {
-        var ww = Components.classes["@mozilla.org/embedcomp/window-watcher;1"]
-                   .getService(Components.interfaces.nsIWindowWatcher);
-        ww.openWindow('chrome://boycottplus/content/managerUI/manager.xul', 'boycottPlusManagerWindow', 'height=450,width=520,resizable=yes,dialog=yes,alwaysRaised=yes,titlebar=yes')
+        var currentManager = tools._wm.getMostRecentWindow("boycottplus:manager");
+        if (currentManager) {
+            currentManager.focus();
+        }
+        else {
+            tools._ww.openWindow(null,
+                            'chrome://boycottplus/content/managerUI/manager.xul',
+                            'boycottPlusManagerWindow',
+                            'height=450,width=520,resizable,dialog,alwaysRaised,chrome,centerscreen,titlebar',
+                            null);
+        }
     },
     
     findCompanies : function (host) {

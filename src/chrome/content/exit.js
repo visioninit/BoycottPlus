@@ -1,17 +1,13 @@
-﻿(function () {
-    var imported = {};
-    Components.utils.import("resource://boycottplus/modules/boycottplus.jsm", imported);
-    var boycottPlus = imported.boycottPlus;
-    
-    gBrowser.addEventListener("DOMContentLoaded", boycottPlus.bar.onPageLoad, true);
+﻿Components.utils.import("resource://boycottplus/modules/boycottplus.jsm");
 
-    boycottPlus.tools.registerCSS();
+gBrowser.addEventListener("DOMContentLoaded", boycottPlus.bar.onPageLoad, true);
 
-    boycottPlus.data.restoreData();
+boycottPlus.tools.registerCSS();
 
-    Components.classes["@mozilla.org/observer-service;1"]
-        .getService(Components.interfaces.nsIObserverService)
-        .addObserver({ observe : function (sub, top, dat) {
-                boycottPlus.data.saveData();
-            }}, "quit-application-requested", false);  
-})();
+boycottPlus.data.restoreData();
+
+Components.classes["@mozilla.org/observer-service;1"]
+    .getService(Components.interfaces.nsIObserverService)
+    .addObserver({ observe : function (sub, top, dat) {
+            boycottPlus.data.saveData();
+        }}, "quit-application-requested", false);

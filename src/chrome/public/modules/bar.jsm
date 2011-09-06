@@ -28,12 +28,11 @@ var bar = {
         var companies = tools.findCompanies(doc.location.host);
         
         if (companies) {
-            bar._addBar(notification, companies);
+            bar._addBar(notification.ownerDocument, notification, companies);
         }
     },
     
-    _addBar : function (notification, companies) {
-        var doc = document; // use the global document, ignore doc
+    _addBar : function (doc, notification, companies) {
         var $ = tools.$e.bind(doc, doc);
         
         var currentBar = notification.querySelector("#boycottPlusBar");

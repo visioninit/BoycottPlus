@@ -1,8 +1,6 @@
 //open("chrome://boycottplus/content/managerUI/manager.xul", "boycottPlusManagerWindow", "height=450,width=520,resizable=yes,dialog=yes,modal=yes,alwaysRaised=yes,titlebar=yes")
 
-//Components.utils.import("resource://boycottplus/modules/boycottplus.jsm");
-
-boycottPlus = {};
+Components.utils.import("resource://boycottplus/modules/boycottplus.jsm");
 
 var $ = boycottPlus.tools.$e.bind(document, document);
 
