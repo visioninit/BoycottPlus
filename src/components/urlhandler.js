@@ -1,5 +1,5 @@
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
-Components.utils.import("chrome://boycottplus/content/jsm/broadcast.jsm");
+Components.utils.import("resource://boycottplus/modules/boycottplus.jsm");
 
 function TheComponent() { }
 
@@ -19,13 +19,13 @@ TheComponent.prototype = {
         }
         
         if (location.scheme === "boycottplus") {
-            Broadcast.broadcast("opened", "URL", location.host + location.path);
+            boycottPlus.tools.broadcast("opened", "URL", "http://" + location.host + location.path);
             return REJECT_OTHER;
         }
         
         if ((location.scheme === "http" || location.scheme === "https")
                 && location.path.search(/\.bcp$/) !== -1) {
-            Broadcast.broadcast("opened", "URL", location.host + location.path);
+            boycottPlus.tools.broadcast("opened", "URL", location.scheme + "://" + location.host + location.path);
             return REJECT_OTHER;
         }
         
