@@ -1,7 +1,5 @@
 var EXPORTED_SYMBOLS = ["tools"];
 
-Components.utils.import("resource://boycottplus/modules/data.jsm");
-
 var tools = {
     registerCSS : function () {
         var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"]
@@ -44,9 +42,10 @@ var tools = {
         var currentManager = tools._wm.getMostRecentWindow("boycottplus:manager");
         if (currentManager) {
             currentManager.focus();
+            return currentManager;
         }
         else {
-            tools._ww.openWindow(null,
+            return tools._ww.openWindow(null,
                             'chrome://boycottplus/content/managerUI/manager.xul',
                             'boycottPlusManagerWindow',
                             'height=450,width=520,resizable,dialog,alwaysRaised,chrome,centerscreen,titlebar',
@@ -54,7 +53,7 @@ var tools = {
         }
     },
     
-    findCompanies : function (host) {
+    findCompanies : function (data, host) {
         var arr = host.split(".");
         
         while (arr.length > 1) {
@@ -65,6 +64,35 @@ var tools = {
             arr.shift();
         }
         return null;
+    },
+
+    _setTimeoutOrInterval : function (once, func, delay) {
+        var timer = Components.classes["@mozilla.org/timer;1"]
+                        .createInstance(Components.interfaces.nsITimer);
+        once = once ? timer.TYPE_ONE_SHOT : timer.TYPE_REPEATING_SLACK;
+        timer.initWithCallback({ notify : func }, delay, once);
+        return timer;
+    },
+
+    clearTimeout : function (timer) {
+        timer.cancel();
+    },
+
+    clearInterval : function (timer) {
+        timer.cancel();
+    },
+
+    setTimeout : function (func, delay) {
+        return tools._setTimeoutOrInterval(true, func, delay);
+    },
+
+    setInterval : function (func, delay) {
+        return tools._setTimeoutOrInterval(false, func, delay);
+    },
+    
+    XMLHttpRequest : function () {
+        return Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"].
+            createInstance(Components.interfaces.nsIXMLHttpRequest);
     },
     
     $e : function (doc, tag, attr, children) {

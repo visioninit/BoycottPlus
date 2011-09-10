@@ -46,7 +46,7 @@ var data = {
     addOrUpdateSource : function (source) {
         data.removeSource(source);
         
-        var xhr = new XMLHttpRequest();
+        var xhr = new tools.XMLHttpRequest();
         
         var handler = function() {
             if (xhr.readyState === 4 && (source.search(/^http/) === -1 /* remove this condition, temporary hack! */ || xhr.status === 200)) {

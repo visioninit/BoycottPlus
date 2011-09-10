@@ -8,3 +8,6 @@ contract @boycottplus.org/urlhandler;1 {e7497047-f186-4ca5-82e0-69abb255c632}
 category content-policy @boycottplus.org/urlhandler;1 @boycottplus.org/urlhandler;1
 
 overlay   chrome://browser/content/browser.xul   chrome://boycottplus/content/overlay.xul
+overlay   chrome://browser/content/browser.xul   chrome://boycottplus/content/toolbarButton/overlay.xul
+
+style chrome://global/content/customizeToolbar.xul chrome://boycottplus/content/toolbarButton/button.css

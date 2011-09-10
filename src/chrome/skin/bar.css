@@ -1,51 +1,23 @@
-.boycottPopupVisible {
-    visibility: visible;
-    
-    position: fixed;
-    height: 100px;
-    width: 150px;
-    bottom: 2px;
-    right: 2px;
-    background: red;
-    
-    -moz-transition: all ease-in-out 200ms;
+.boycottImage {
+    height: 32px;
+    width: 32px;
+    margin: 20px 10px 10px 18px;
 }
 
-.boycottPopupHidden {
-    visibility: visible; /*make it hidden later, or remove visibility*/
-    
-    position: fixed;
-    height: 100px;
-    width: 150px;
-    bottom: -100px;
-    right: 2px;
-    
-    background: red;
-    
-    -moz-transition: all ease-in-out 200ms;
+.boycottBarlet {
+    margin: 4px 0 4px 0;
 }
 
-/*#boycottBar {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    
-    background-color: red;
-    padding: 7px;
+.boycottBarletContainer {
+    margin: 12px 0 12px 5px;
 }
 
-#boycottIcon {
-    height: 48px;
-    width: 48px;
-    float: left;
-    
-    margin: 10px 10px 5px 5px;
-    background-image: url('chrome://boycottplus/skin/icon48.png');
+.boycottBar li {
+    margin: 0 0 0 20px;
+    padding: 0 0 0 0;
 }
 
-#boycottText {
-    display: inline-block;
-    padding: 5px;
-    font-size: 14px;
-}*/
+.boycottBar ul {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}

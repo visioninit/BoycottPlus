@@ -1,6 +1,7 @@
 var EXPORTED_SYMBOLS = ["bar"];
 
 Components.utils.import("resource://boycottplus/modules/tools.jsm");
+Components.utils.import("resource://boycottplus/modules/data.jsm");
 
 var bar = {
 
@@ -25,30 +26,49 @@ var bar = {
             currentBar.parentNode.removeChild(currentBar);
         }
         
-        var companies = tools.findCompanies(doc.location.host);
+        var companies = tools.findCompanies(data, doc.location.host);
         
         if (companies) {
             bar._addBar(notification.ownerDocument, notification, companies);
         }
     },
     
+    _makeBarlet : function (doc, company) {
+        var $ = tools.$e.bind(doc, doc);
+        
+        var barlet = $("vbox", {"class" : "boycottBarlet"}, [doc.createTextNode("Boycott " + company.companyName + " for the cause \"" + company._boycott.name + "\"")]);
+        if (company.causeDetail.length) {
+            var ul = doc.createElementNS("http://www.w3.org/1999/xhtml", "ul");
+            company.causeDetail.forEach(function (text) {
+                var li = doc.createElementNS("http://www.w3.org/1999/xhtml", "li");
+                li.appendChild(doc.createTextNode(text));
+                ul.appendChild(li);
+            });
+            barlet.appendChild(ul);
+        }
+        
+        return barlet;
+    },
+    
     _addBar : function (doc, notification, companies) {
         var $ = tools.$e.bind(doc, doc);
         
-        var currentBar = notification.querySelector("#boycottPlusBar");
+        var currentBar = notification.querySelector(".boycottBar");
         if (currentBar) {
             currentBar.parentNode.removeChild(currentBar);
         }
         
-        var company = companies[0]; // use only the first company for now
-        var listItems = company.causeDetail
-                            .map(function (i) { return doc.createTextNode(i); })
-                            .map(function (i) { var li = doc.createElement("li"); li.appendChild(i); return li; });
+        var barlets = [];
+        for (var i = 0; i < companies.length; ++i) {
+            barlets.push(this._makeBarlet(doc, companies[i]));
+        }
         
-        var bar = 
-            $("box", { "id" : "boycottPlusBar" }, [
-                $("ul", {}, listItems)
-            ]);
+        var bar = $("hbox", {"class" : "boycottBar"}, [
+            $("vbox", {"class" : "boycottImageContainer"}, [
+                $("image", {"class" : "boycottImage", "src" : "chrome://boycottplus/skin/icon32.png"})
+            ]),
+            $("vbox", {"class" : "boycottBarletContainer"}, barlets)
+        ]);
         
         notification.insertBefore(bar, notification.firstChild);
         

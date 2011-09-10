@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css"
+  href="chrome://boycottplus/content/toolbarButton/button.css"?>
+
+<!DOCTYPE overlay >
+<overlay id="custombutton-overlay"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script type="application/javascript" src="chrome://boycottplus/content/toolbarButton/button.js"/>
+
+    <toolbarpalette id="BrowserToolbarPalette">
+        <toolbarbutton id="boycottToolbarButton"/>
+    </toolbarpalette>
+
+    <toolbarbutton id="boycottToolbarButton" label="BoycottPlus" tooltiptext="BoycottPlus"
+                oncommand="onCommand()" class="toolbarbutton-1 chromeclass-toolbar-additional"/>
+
+</overlay>

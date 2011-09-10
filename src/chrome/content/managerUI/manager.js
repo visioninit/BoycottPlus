@@ -1,5 +1,3 @@
-//open("chrome://boycottplus/content/managerUI/manager.xul", "boycottPlusManagerWindow", "height=450,width=520,resizable=yes,dialog=yes,modal=yes,alwaysRaised=yes,titlebar=yes")
-
 Components.utils.import("resource://boycottplus/modules/boycottplus.jsm");
 
 var $ = boycottPlus.tools.$e.bind(document, document);
@@ -46,15 +44,19 @@ function removeBySource(url) {
     }
 }
 
-function onAddClicked () {
+function addUrl(url) {
     var tree = document.querySelector("tree");
     var treechildren = document.querySelector("treechildren");
     
+    removeBySource(url);
+    treechildren.appendChild(makeTreeItem(["...", url]));
+    boycottPlus.data.addOrUpdateSource(url);
+}
+
+function onAddClicked () {
     var url = window.prompt("Enter the Boycott URL:");
     if (url) {
-        removeBySource(url);
-        treechildren.appendChild(makeTreeItem(["...", url]));
-        boycottPlus.data.addOrUpdateSource(url);
+        addUrl(url);
     }
 }
 

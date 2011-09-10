@@ -1,0 +1,17 @@
+#boycottToolbarButton {
+  list-style-image: url("chrome://boycottplus/skin/icon20.png");
+}
+
+#boycottToolbarButton:hover {
+  list-style-image: url("chrome://boycottplus/skin/icon20.png");
+}
+
+toolbar[iconsize="small"] #boycottToolbarButton {
+  list-style-image: url("chrome://boycottplus/skin/icon16.png");
+}
+
+toolbar[iconsize="small"] #boycottToolbarButton:hover {
+  list-style-image: url("chrome://boycottplus/skin/icon16.png");
+}
+
+

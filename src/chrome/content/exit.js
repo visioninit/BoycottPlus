@@ -6,9 +6,6 @@ boycottPlus.tools.registerCSS();
 // add the page load listener
 gBrowser.addEventListener("DOMContentLoaded", boycottPlus.bar.onPageLoad, true);
 
-// add the notification box
-top.addEventListener("load", boycottPlus.notification.addPopup, false)
-
 // load the data to the memory
 boycottPlus.data.restoreData();
 
