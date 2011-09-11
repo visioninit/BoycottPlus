@@ -10,6 +10,15 @@
 
 .boycottBarletContainer {
     margin: 12px 0 12px 5px;
+    
+    -moz-box-flex: 1;
+}
+
+.boycottBar {
+    background: #3344BB;
+    color: #FCFCFC;
+    font-family: sans-serif;
+    font-weight: bold;
 }
 
 .boycottBar li {
@@ -20,4 +29,15 @@
 .boycottBar ul {
     margin: 0 0 0 0;
     padding: 0 0 0 0;
+}
+
+.boycottCloseContainer {
+
+}
+
+.boycottClose {
+    width: 12px;
+    height: 12px;
+    
+    margin: 7px 7px 0 0;
 }

@@ -50,10 +50,17 @@ var data = {
         
         var handler = function() {
             if (xhr.readyState === 4 && (source.search(/^http/) === -1 /* remove this condition, temporary hack! */ || xhr.status === 200)) {
-                var json = JSON.parse(xhr.responseText);
-                data._addSource(source, json);
-                tools.broadcast("UpdateEntry", "event", JSON.stringify([json.name, source]));
-                data.saveData();
+                try {
+                    var json = JSON.parse(xhr.responseText);
+                    if (!tools.validate(json)) {
+                        throw "Invalid .bcp file";
+                    }
+                    data._addSource(source, json);
+                    tools.broadcast("UpdateEntry", "event", JSON.stringify([json.name, source]));
+                    data.saveData();
+                }
+                catch (ex) {
+                }
             }
         };
         

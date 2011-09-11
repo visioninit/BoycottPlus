@@ -21,7 +21,7 @@ var bar = {
         var gBrowser = this;
         var browser = gBrowser.getBrowserForDocument(doc);
         var notification = gBrowser.getNotificationBox(browser);
-        var currentBar = notification.querySelector("#boycottPlusBar");
+        var currentBar = notification.querySelector(".boycottBar");
         if (currentBar) {
             currentBar.parentNode.removeChild(currentBar);
         }
@@ -67,10 +67,17 @@ var bar = {
             $("vbox", {"class" : "boycottImageContainer"}, [
                 $("image", {"class" : "boycottImage", "src" : "chrome://boycottplus/skin/icon32.png"})
             ]),
-            $("vbox", {"class" : "boycottBarletContainer"}, barlets)
+            $("vbox", {"class" : "boycottBarletContainer"}, barlets),
+            $("vbox", {"class" : "boycottCloseContainer"}, [
+                $("image", {"class" : "boycottClose", "src" : "chrome://boycottplus/skin/close12.png"})
+            ])
         ]);
         
         notification.insertBefore(bar, notification.firstChild);
         
+        notification.querySelector(".boycottClose").addEventListener("click", function () {
+            var bar = notification.querySelector(".boycottBar");
+            bar.parentNode.removeChild(bar);
+        }, true);
     }
 };

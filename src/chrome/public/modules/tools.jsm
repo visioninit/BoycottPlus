@@ -95,6 +95,38 @@ var tools = {
             createInstance(Components.interfaces.nsIXMLHttpRequest);
     },
     
+    validate : function(obj) {
+        function assert(bool) {
+            if (!bool) {
+                throw "Assertion failed";
+            }
+        }
+        
+        try {
+            assert(typeof obj.name === "string");
+            assert(typeof obj.sponsorName === "string");
+            assert(typeof obj.sponsorUrl === "string");
+            obj.company.forEach(function (company) {
+                assert(typeof company.companyId === "string");
+                assert(typeof company.companyName === "string");
+                assert(typeof company.causeEvidence === "string");
+                assert(typeof company.learnMore === "string");
+                company.domains.forEach(function (domain) {
+                    assert(typeof domain === "string");
+                });
+                company.causeDetail.forEach(function (domain) {
+                    assert(typeof domain === "string");
+                });
+                assert(typeof company.type === "string");
+            });
+        }
+        catch (ex) {
+            return false;
+        }
+        
+        return true;
+    },
+    
     $e : function (doc, tag, attr, children) {
         var el = doc.createElement(tag);
         if (attr) {
