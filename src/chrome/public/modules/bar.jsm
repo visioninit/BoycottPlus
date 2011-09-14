@@ -25,6 +25,11 @@ var bar = {
         if (currentBar) {
             currentBar.parentNode.removeChild(currentBar);
         }
+
+        // if we're on boycottplus.org, add an attribute to notify the site
+        if (doc.location.host.split(".").slice(-2).join(".") === "boycottplus.org") {
+            doc.body.setAttribute("data-extension", "yes");
+        }
         
         var companies = tools.findCompanies(data, doc.location.host);
         
