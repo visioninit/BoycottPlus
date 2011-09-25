@@ -9,11 +9,11 @@
   <script type="application/x-javascript" src="chrome://boycottplus/content/managerUI/manager.js" />
   
   <vbox flex="1">
-    <tree id="tree3" flex="1" hidecolumnpicker="true" enableColumnDrag="true" seltype="single" >
+    <tree flex="1" hidecolumnpicker="true" enableColumnDrag="true" seltype="single" >
       <treecols>
-        <treecol id="name3" flex="1" label="Name" />
+        <treecol id="nameCol" flex="1" label="Name" />
         <splitter class="tree-splitter" />
-        <treecol id="sex3" flex="1" label="Source"  />
+        <treecol id="sourceCol" flex="1" label="Source"  />
       </treecols>
 
       <treechildren>

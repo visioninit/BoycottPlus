@@ -56,7 +56,7 @@ var data = {
                         throw "Invalid .bcp file";
                     }
                     data._addSource(source, json);
-                    tools.broadcast("UpdateEntry", "event", JSON.stringify([json.name, source]));
+                    tools.broadcast("SourceAddedOrUpdated", "event", JSON.stringify([json.name, source]));
                     data.saveData();
                 }
                 catch (ex) {
@@ -90,6 +90,8 @@ var data = {
                 delete domainToCompanies[i];
             }
         }
+        
+        tools.broadcast("SourceRemoved", "event", source);
         
         data.saveData();
     },

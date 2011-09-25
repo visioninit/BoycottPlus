@@ -1,7 +1,7 @@
 ﻿Components.utils.import("resource://boycottplus/modules/boycottplus.jsm");
 
 // register the css files used by the extension
-boycottPlus.tools.registerCSS();
+boycottPlus.tools.registerCSS("chrome://boycottplus/skin/bar.css");
 
 // add the page load listener
 gBrowser.addEventListener("DOMContentLoaded", boycottPlus.bar.onPageLoad, true);

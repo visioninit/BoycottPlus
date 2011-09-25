@@ -1,0 +1,14 @@
+.boycottToolbarBody {
+    width: 250px;
+    height: 250px;
+}
+
+.boycottToolbarBody * {
+    list-style-image: none;
+}
+
+.boycottCenteredBox {
+    margin-left: auto;
+    margin-right: auto;
+    vertical-align: middle;
+}

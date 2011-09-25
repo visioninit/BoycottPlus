@@ -4,12 +4,6 @@ var $ = boycottPlus.tools.$e.bind(document, document);
 
 var eventListenerHandle = boycottPlus.tools.addObserver(eventListener, "event");
 
-function eventListener(subject, topic, data) {
-    if (subject === "UpdateEntry") {
-        updateEntry(JSON.parse(data));
-    }
-}
-
 function makeTreeItem(i) {
     return $("treeitem", {}, [
             $("treerow", {}, i.map(function (j) { return $("treecell", {"label" : j}) }))
@@ -33,6 +27,33 @@ function updateEntry(array) {
     var row = findBySource(source);
     if (row) {
         row.childNodes[0].setAttribute("label", name);
+    }
+    else {
+        var treechildren = document.querySelector("treechildren");
+        treechildren.appendChild(
+            $("treeitem", {}, [
+                $("treerow", {}, [
+                    $("treecell", {"label" : name}),
+                    $("treecell", {"label" : source})
+                ])
+            ]));
+    }
+}
+
+function eventListener(subject, topic, data) {
+    if (subject === "SourceAddedOrUpdated") {
+        updateEntry(JSON.parse(data));
+    }
+    else if (subject === "SourceRemoved") {
+        removeSource(data);
+    }
+}
+
+function removeSource(source) {
+    var row = findBySource(source);
+    if (row) {
+        var item = row.parentNode;
+        item.parentNode.removeChild(item);
     }
 }
 
@@ -71,7 +92,6 @@ function onRemoveClicked () {
     var selected = treechildren.childNodes[tree.currentIndex];
     var source = selected.firstChild.childNodes[1].getAttribute("label");
     boycottPlus.data.removeSource(source);
-    selected.parentNode.removeChild(selected);
 }
 
 function onModifyClicked () {

@@ -13,5 +13,3 @@ toolbar[iconsize="small"] #boycottToolbarButton {
 toolbar[iconsize="small"] #boycottToolbarButton:hover {
   list-style-image: url("chrome://boycottplus/skin/icon16.png");
 }
-
-

@@ -12,7 +12,29 @@
         <toolbarbutton id="boycottToolbarButton"/>
     </toolbarpalette>
 
-    <toolbarbutton id="boycottToolbarButton" label="BoycottPlus" tooltiptext="BoycottPlus"
-                oncommand="onCommand()" class="toolbarbutton-1 chromeclass-toolbar-additional"/>
+    <toolbarbutton id="boycottToolbarButton" label="BoycottPlus" tooltiptext="BoycottPlus" type="menu">
+        <menupopup>
+            <window>
+                <vbox class="boycottToolbarBody">
+                    <tree flex="1" hidecolumnpicker="true" enableColumnDrag="true" seltype="single" >
+                        <treecols>
+                            <treecol id="nameCol" flex="1" label="Name" />
+                            <splitter class="tree-splitter" />
+                            <treecol id="sourceCol" flex="1" label="Source"  />
+                        </treecols>
+
+                        <treechildren>
+                        </treechildren>
+                    </tree>
+                    
+                    <hbox>
+                        <button label="Add" oncommand="onAddClicked()" />
+                        <button label="Remove" oncommand="onRemoveClicked()" />
+                        <button label="Modify" oncommand="onModifyClicked()" />
+                    </hbox>
+                </vbox>
+            </window>
+        </menupopup>
+    </toolbarbutton>
 
 </overlay>
