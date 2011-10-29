@@ -13,3 +13,23 @@ toolbar[iconsize="small"] #boycottToolbarButton {
 toolbar[iconsize="small"] #boycottToolbarButton:hover {
   list-style-image: url("chrome://boycottplus/skin/icon16.png");
 }
+
+#boycottToolbarDisplayWidget {
+  -moz-box-flex: 1;
+  -moz-binding: url("chrome://boycottplus/content/widgets/display.xbl#widget");
+}
+
+.boycottToolbarBody {
+    width: 250px;
+    height: 250px;
+}
+
+.boycottToolbarBody * {
+    list-style-image: none;
+}
+
+.boycottCenteredBox {
+    margin-left: auto;
+    margin-right: auto;
+    vertical-align: middle;
+}

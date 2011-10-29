@@ -16,21 +16,11 @@
         <menupopup>
             <window>
                 <vbox class="boycottToolbarBody">
-                    <tree flex="1" hidecolumnpicker="true" enableColumnDrag="true" seltype="single" >
-                        <treecols>
-                            <treecol id="nameCol" flex="1" label="Name" />
-                            <splitter class="tree-splitter" />
-                            <treecol id="sourceCol" flex="1" label="Source"  />
-                        </treecols>
-
-                        <treechildren>
-                        </treechildren>
-                    </tree>
+                    <box id="boycottToolbarDisplayWidget" />
                     
                     <hbox>
                         <button label="Add" oncommand="onAddClicked()" />
                         <button label="Remove" oncommand="onRemoveClicked()" />
-                        <button label="Modify" oncommand="onModifyClicked()" />
                     </hbox>
                 </vbox>
             </window>

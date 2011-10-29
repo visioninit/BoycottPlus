@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+
+<bindings
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml">
+  <binding id="widget">
+
+    <content>
+      <xul:tree flex="1" hidecolumnpicker="true" enableColumnDrag="true" seltype="single" class="displayWidgetTree" >
+        <xul:treecols>
+          <xul:treecol id="nameCol" flex="1" label="Name" />
+          <xul:splitter class="tree-splitter" />
+          <xul:treecol id="sourceCol" flex="1" label="Source"  />
+        </xul:treecols>
+
+        <xul:treechildren>
+        </xul:treechildren>
+      </xul:tree>
+    </content>
+    
+    <implementation>
+    
+      <constructor><![CDATA[      
+        Components.utils.import("resource://boycottplus/modules/boycottplus.jsm");
+        
+        var bound = this;
+        
+        bound.$ = boycottPlus.tools.$e.bind(bound, document);
+        bound.tree = document.getAnonymousElementByAttribute(bound, "class", "displayWidgetTree");
+        bound.treechildren = bound.tree.querySelector("treechildren");
+
+        bound.makeTreeItem = function (i) {
+            return $("treeitem", {}, [
+                    $("treerow", {}, i.map(function (j) { return $("treecell", {"label" : j}) }))
+                ]);
+        };
+
+        bound.findBySource = function (source) {
+            var rows = bound.tree.querySelectorAll("treerow");
+            for (var i = 0; i < rows.length; ++i) {
+                if (rows[i].childNodes[1].getAttribute("label") == source) {
+                    return rows[i];
+                }
+            }
+            return null;
+        };
+
+        bound.updateEntry = function (array) {
+            var name = array[0];
+            var source = array[1];
+            
+            var row = bound.findBySource(source);
+            if (row) {
+                row.childNodes[0].setAttribute("label", name);
+            }
+            else {
+                var treechildren = bound.tree.querySelector("treechildren");
+                treechildren.appendChild(
+                    $("treeitem", {}, [
+                        $("treerow", {}, [
+                            $("treecell", {"label" : name}),
+                            $("treecell", {"label" : source})
+                        ])
+                    ]));
+            }
+        };
+
+        bound.eventListener = function (subject, topic, data) {
+            if (subject === "SourceAddedOrUpdated") {
+                bound.updateEntry(JSON.parse(data));
+            }
+            else if (subject === "SourceRemoved") {
+                bound.removeSource(data);
+            }
+        };
+
+        bound.removeSource = function (source) {
+            var row = bound.findBySource(source);
+            if (row) {
+                var item = row.parentNode;
+                item.parentNode.removeChild(item);
+            }
+        };
+
+        bound.refreshList = function () {
+            var treechildren = bound.tree.querySelector("treechildren");
+            
+            while (treechildren.firstChild) {
+                treechildren.removeChild(firstChild);
+            }
+            
+            var items = [];
+            var tracked = boycottPlus.data._data.tracked;
+            for (var i in tracked) {
+                if (!tracked.hasOwnProperty(i)) {
+                    continue;
+                }
+                items.push([tracked[i].name, i]);
+            }
+            
+            items = items.map(bound.makeTreeItem);
+            
+            items.forEach(function(i) {
+                treechildren.appendChild(i);
+            });
+        };
+        
+        bound.observerHandle = boycottPlus.tools.addObserver(bound.eventListener, "event");
+        
+        bound.refreshList();
+      ]]></constructor>
+      
+      <method name="getSelected">
+        <body><![CDATA[
+          var index = this.tree.currentIndex;
+          if (index < 0) {
+            return "";
+          }
+          return this.treechildren.childNodes[index].firstChild.childNodes[1].getAttribute("label");
+        ]]></body>
+      </method>
+      
+      <destructor><![CDATA[
+        boycottPlus.tools.removeObserver(this.observerHandle);
+      ]]></destructor>
+      
+    </implementation>
+    
+  </binding>
+</bindings>
