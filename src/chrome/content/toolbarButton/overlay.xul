@@ -19,8 +19,8 @@
                     <box id="boycottToolbarDisplayWidget" />
                     
                     <hbox>
-                        <button label="Add" oncommand="onAddClicked()" />
-                        <button label="Remove" oncommand="onRemoveClicked()" />
+                        <button label="Add" oncommand="boycottPlus.toolbarButton.onAddClicked()" />
+                        <button label="Remove" oncommand="boycottPlus.toolbarButton.onRemoveClicked()" />
                     </hbox>
                 </vbox>
             </window>
