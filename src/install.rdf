@@ -4,10 +4,10 @@
     <em:id>extension@boycottplus.org</em:id>
     <em:type>2</em:type>
     <em:name>Boycott Plus</em:name>
-    <em:version>0.3</em:version>
+    <em:version>0.4</em:version>
     <em:creator>boycottplus.org</em:creator>
     <em:contributor></em:contributor>
-    <em:description>Helps you align your browsing with your values.</em:description>
+    <em:description>After installing this module, you can subscribe to boycotts.  Subscribing to a boycott will tell Firefox to give you a heads up when you're visiting a page that is included in your profile.</em:description>
     <em:iconURL>chrome://boycottplus/skin/icon32.png</em:iconURL>
     <em:targetApplication>
       <Description>

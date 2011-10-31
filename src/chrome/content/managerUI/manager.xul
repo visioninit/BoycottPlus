@@ -13,7 +13,6 @@
     <box id="displayWidget" />
     
     <hbox>
-      <button label="Add" oncommand="onAddClicked()" />
       <button label="Remove" oncommand="onRemoveClicked()" />
     </hbox>
   </vbox>
