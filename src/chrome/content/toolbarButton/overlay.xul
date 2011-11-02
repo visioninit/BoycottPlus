@@ -20,7 +20,6 @@
                     
                     <hbox>
                         <button label="Remove" oncommand="boycottPlus.toolbarButton.onRemoveClicked()" />
-                        <button label="Manual add from URL" oncommand="boycottPlus.toolbarButton.onAddClicked()" />
                     </hbox>
                 </vbox>
             </window>
