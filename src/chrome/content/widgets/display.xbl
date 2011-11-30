@@ -10,8 +10,6 @@
       <xul:tree flex="1" hidecolumnpicker="true" enableColumnDrag="true" seltype="single" class="displayWidgetTree" >
         <xul:treecols>
           <xul:treecol id="nameCol" flex="1" label="Name" />
-          <xul:splitter class="tree-splitter" />
-          <xul:treecol id="sourceCol" flex="1" label="Source"  />
         </xul:treecols>
 
         <xul:treechildren>
