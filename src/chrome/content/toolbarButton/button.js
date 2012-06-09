@@ -1,3 +1,4 @@
+/*
 Components.utils.import("resource://boycottplus/modules/boycottplus.jsm");
 
 boycottPlus.toolbarButton = {
@@ -5,7 +6,7 @@ boycottPlus.toolbarButton = {
         var url = window.prompt("Enter the Boycott URL:");
         if (url) {
             boycottPlus.tools.broadcast("SourceAddedOrUpdated", "event", JSON.stringify(["...", url]));
-            boycottPlus.data.addOrUpdateSource(url);
+            boycottPlus.data.showNewBoycottDetailsJSON(url);
         }
     },
 
@@ -16,3 +17,4 @@ boycottPlus.toolbarButton = {
         }
     }
 };
+*/

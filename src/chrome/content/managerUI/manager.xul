@@ -11,10 +11,6 @@
   
   <vbox flex="1">
     <box id="displayWidget" />
-    
-    <hbox>
-      <button label="Remove" oncommand="onRemoveClicked()" />
-    </hbox>
   </vbox>
 
 </window>

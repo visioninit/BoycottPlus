@@ -8,7 +8,7 @@ var bar = {
     onPageLoad : function (ev) {
         var doc = ev.originalTarget;
         var win = doc.defaultView;
-        
+
         if (!win || !win.HTMLDocument || !(doc instanceof win.HTMLDocument)) {
             return; // handle html documents only
         }
@@ -34,7 +34,7 @@ var bar = {
         var companies = tools.findCompanies(data, doc.location.host);
         
         if (companies) {
-            bar._addBar(notification.ownerDocument, notification, companies);
+			bar._addBar(notification.ownerDocument, notification, companies);
         }
     },
     
@@ -55,7 +55,7 @@ var bar = {
         return barlet;
     },
     
-    _addBar : function (doc, notification, companies) {
+    _addBar : function (doc, notification, companies, gBrowser) {	
         var $ = tools.$e.bind(doc, doc);
         
         var currentBar = notification.querySelector(".boycottBar");
@@ -81,8 +81,10 @@ var bar = {
         notification.insertBefore(bar, notification.firstChild);
         
         notification.querySelector(".boycottClose").addEventListener("click", function () {
+			gBrowser.selectedBrowser.setAttribute('boycottPlus_allow', 'true');
             var bar = notification.querySelector(".boycottBar");
             bar.parentNode.removeChild(bar);
+			
         }, true);
-    }
+    },
 };

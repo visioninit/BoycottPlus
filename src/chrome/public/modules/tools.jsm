@@ -2,21 +2,18 @@ var EXPORTED_SYMBOLS = ["tools"];
 
 var tools = {
     registerCSS : function (url) {
-        var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"]
-                            .getService(Components.interfaces.nsIStyleSheetService);
-        var ios = Components.classes["@mozilla.org/network/io-service;1"]
-                            .getService(Components.interfaces.nsIIOService);
+        var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
+        var ios = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
         var uri = ios.newURI(url, null, null);
         if (!sss.sheetRegistered(uri, sss.USER_SHEET)) {
             sss.loadAndRegisterSheet(uri, sss.USER_SHEET);
         }
     },
     
-    _obs : Components.classes["@mozilla.org/observer-service;1"]  
-              .getService(Components.interfaces.nsIObserverService),
+    _obs : Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService),
     
     broadcast : function (subject, channel, data) {
-        tools._obs.notifyObservers(null, "boycottPlus" + channel, JSON.stringify([subject, data]));  
+        tools._obs.notifyObservers(null, "boycottPlus" + channel, JSON.stringify([subject, data]));
     },
     
     addObserver : function (func, channel) {
@@ -46,13 +43,35 @@ var tools = {
         }
         else {
             return tools._ww.openWindow(null,
-                            'chrome://boycottplus/content/managerUI/manager.xul',
-                            'boycottPlusManagerWindow',
-                            'height=450,width=520,resizable,dialog,alwaysRaised,chrome,centerscreen,titlebar',
-                            null);
+				'chrome://boycottplus/content/managerUI/manager.xul',
+				'boycottPlusManagerWindow',
+				'height=600,width=520,dialog,resizable=no,alwaysRaised,modal,chrome,centerscreen,titlebar,dependent',
+				null);
         }
     },
-    
+	openCampaignDetails : function () {
+		var currentManager = tools._wm.getMostRecentWindow("boycottplus:detail");
+        if (currentManager) {
+            currentManager.focus();
+            return currentManager;
+        } else {
+            return tools._ww.openWindow(null,
+				'chrome://boycottplus/content/campaignDetailsUI/campaign_detail.xul',
+				'boycottPlusDetailWindow',
+				'height=600,width=520,dialog,resizable=no,alwaysRaised,modal,chrome,centerscreen,titlebar,dependent',
+				null);
+        }
+	},
+	/*
+	openWindow : function () {
+		return tools._ww.openWindow(null,
+			'chrome://boycottplus/content/dialogs/just_installed.xul',
+			'just_installed',
+			'modal,centerscreen,resizable=no',
+			null
+		);
+	},
+    */
     findCompanies : function (data, host) {
         var arr = host.split(".");
         

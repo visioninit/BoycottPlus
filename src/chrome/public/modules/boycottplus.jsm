@@ -8,5 +8,11 @@ Components.utils.import("resource://boycottplus/modules/installrequest.jsm");
 var boycottPlus = {
     bar : bar,
     data : data,
-    tools : tools
+    tools : tools,
+	selectedCampaign : null,
+	newCampaign: false,
+	newBoycottJSON: {
+			source: null,
+			JSON: null
+		}
 };

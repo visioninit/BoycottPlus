@@ -4,9 +4,9 @@ Components.utils.import("resource://boycottplus/modules/tools.jsm");
 Components.utils.import("resource://boycottplus/modules/data.jsm");
 
 function requestHandler(sub, top, dat) {
-    tools.openManager();
+	// Get JSON and open Campaign Details Window.
     tools.broadcast("SourceAddedOrUpdated", "event", JSON.stringify(["...", dat]));
-    data.addOrUpdateSource(dat);
+    data.showNewBoycottDetailsJSON(dat, false);
 }
 
 tools.addObserver(requestHandler, "URL");
