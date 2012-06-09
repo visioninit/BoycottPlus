@@ -11,6 +11,6 @@
 	ondialogaccept="opener.boycottplus.justInstalled(this);"
 >
 	<description style="margin-bottom:10px;max-width:300px;">
-		Do you want to visit boycottplus.org to find a boycott campaign to join?
+		Do you want to visit our site for more information about campaigns?
 	</description>
 </dialog>

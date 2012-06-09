@@ -1,4 +1,0 @@
-#displayWidget {
-  -moz-box-flex: 1;
-  -moz-binding: url("chrome://boycottplus/content/widgets/display.xbl#widget");
-}
