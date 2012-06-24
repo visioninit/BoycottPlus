@@ -1,29 +1,73 @@
-"Boycott" Addon
-    A value adding proposition
 
-updatedDate     - unix timestamp
-company:type    - boycott or buycott
+About
+----------------------------------
 
+Boycott Plus allows users to subscribe their browser to a Boycott Campaign.
+
+Boycott Plus Firefox Addon: A tool which users download and install to their Firefox browser. It provides a management interface for subscribing and unsubscribing to campaigns, as well as providing many other features such as refresh frequency, blocking options, and drill down options to review boycott details.
+
+boycottplus.org: A website provides tools and resources for users to distribute their boycotts. However, we have used libre code and open standards each step of the way and do not require campaigns (hosted as .bcp files) to be created or hosted with our services.
+
+Boycott Plus is a product provided by Design Intentional. The lead of this project is Justin Riddiough, whom is investing his own income and time to hire developers and build this website and its tools. If you understand what we are trying to do and wish to support us, please consider donating.
+
+
+Subscribe to a Boycott Campaign
+----------------------------------
+
+    Install the Addon
+    Visit the Campaigns page and click on the "Subscribe" link for the campaign you chose
+
+Launching a Boycott Campaign
+----------------------------------
+
+A dashboard interface is provided to create and maintaining campaigns and org lists. To access the interface, log in and you will be redirected to it automatically.
+
+Two important steps in creating a Boycott Campaign
+
+    Create a Campaign
+    Create an Org List
+
+1. Create a Campaign
+A Campaign is a sort of bucket. To further the bucket analogy, this would be the sticker on the outside of the bucket that contains a bit of information about the contents of the bucket. You have to create an account on Boycott Plus to create a campaign with our tools.
+
+    Log into account
+    Goto: Add Campaign
+
+2. List Organizations you wish to include in your Campaign
+Options are to place all of the organizations you wish to boycott into one organization list, or to create a number of Org Lists. If you chose to use a number of Org Lists, you will be able to refine the alerts messages and provide a more per-organization call to action.
+
+You are responsible for the correctness of all information provided. Our tools enable - in fact they encourage - you to support your assertions with references. References are the basis for campaign subscribers to learn more about the factual basis of the claims to make an informed decision about how to proceed.
+
+    Goto: Add Org List
+    Repeat for each Organization list
+    Update your Campaign to include selected Org Lists
+    Set Campaign status to Published
+
+At this point, others will be able to subscribe to your campaign!
+
+Example json
+----------------------------------
 
 {
-    "name" : "Campaign Title",
-	"bcpVersion" : "0.2alpha",
-	"updatedDate" : "",
-	"sponsorName" : "Campaign Author",
-	"sponsorUrl" : "Campaign URL",
+	"name" : "Campaign Name",
+	"bcpVersion" : "1",
+	"updatedDate" : "1340511643",
+	"sponsorName" : "username",
+	"sponsorUrl" : "http://learnmore.here",
 	"company" : [
 		{
-			"companyId" : "##",
-			"companyName" : "Name of Company",
-			"causeEvidence" : "Long string of text containing evidence and references",
-			"learnMore" : "http://learnmoreaddress.com",
+			"companyId" : "109",
+			"companyName" : "SomeCorp",
+			"causeEvidence" : "blob of data possibly containing html",
+			"learnMore" : "http://url-to-more-evidence.com",
 			"type" : "Boycott",
 			"domains" : [
-                "domainpattern1.com",
-                "domainpattern2.com"
+				"www.boycotted-url.com"
 			],
 			"causeDetail" : [
-				"This is the alert message that appears on screen"
+				"This is a list of the messages that will show up on the users screen when they",
+				"visit one of the websites contained in the Org List",
+                                "Great place for a call to action!"
 			]
 		}
 	]
