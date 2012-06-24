@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://boycottplus/content/.managerUI/manager.css" type="text/css"?>
+
+<window id="boycottPlusManager"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    windowtype="boycottplus:manager"
+    title="BoycottPlus Manager">
+    
+  <script type="application/x-javascript" src="chrome://boycottplus/content/.managerUI/manager.js" />
+  
+  <vbox flex="1">
+    <box id="displayWidget" />
+  </vbox>
+
+</window>

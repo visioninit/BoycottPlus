@@ -4,12 +4,12 @@
 	<binding id="boycottPlusDetail">
 		<content>  
 		
-			<xul:vbox id="container_box" flex="1">
-				<xul:description id="title" />
-				<xul:box><xul:label id="visitSite" class="text-link" onclick="/*window.close()*/;boycottplus.newTab('www.boycottplus.org', true);" value="Visit Campaign Website" /></xul:box>
-				<xul:box><xul:checkbox id="displayChanges" label="Display campaign website in new tab on Campaign changes" /></xul:box>
-				<xul:hbox class="update_box" align="baseline">
-					<xul:label class="frecuency" value="Update Frecuency" />
+			<xul:vbox style="background-color: #CCC;" flex="1">
+				<xul:label id="title" value="" />
+				<xul:label class="text-link" onclick="/*window.close()*/;boycottplus.newTab('www.boycottplus.org');" value="Visit Campaign Website" />
+				<xul:checkbox id="displayChanges" label="Display campaign website in new tab on Campaign changes" />
+				<xul:hbox>
+					<xul:label value="Update Frecuency" />
 					<xul:menulist id="frecuency">
 						<xul:menupopup>
 							<xul:menuitem value="0" label="Let me do it" />
@@ -18,20 +18,21 @@
 							<xul:menuitem value="3" label="Monthly" />
 						</xul:menupopup>
 					</xul:menulist>
-					<!-- Update Details Here -->
+					<xul:label id="lastUpdated" value="" />
+					<xul:button label="Update Now" oncommand="" />
 				</xul:hbox>
-				<xul:vbox id="companiesDetails" height="300" width="250">
+				<xul:vbox id="companiesDetails" style="background-color: #FFF; height: 300px; width: 250px; overflow: auto;">
 					<!-- Campaign Details Here -->
 				</xul:vbox>
 				<xul:vbox>
-					<xul:label class="title_degree" value="Boycott Rule Degree" />
+					<xul:label value="Boycott Rule Degree" />
 					<xul:radiogroup id="notificationType">
 						<xul:radio value="0" label="Disabled - These rules are ignored, you can visit campaign sites with no notification."/>
 						<xul:radio value="1" label="Banner Notify - The website will still load, but you will be provided with an informational banner containing boycott details if you visit a website that is boycotted."/>
 						<xul:radio value="2" label="Block Site - A Boycott Plus page will be displayed instead of the boycotted site, an override option will be presented."/>
 					</xul:radiogroup>
 				</xul:vbox>
-				<xul:hbox id="buttonsBox" pack="end">
+				<xul:hbox id="buttonsBox">
 					<!-- Buttons Here -->
 				</xul:hbox>
 			</xul:vbox>
@@ -39,14 +40,11 @@
 		</content>
 		<implementation>
 			<constructor><![CDATA[
-				// Dynamic height of the window.
-				window.addEventListener('load', function(){
-					window.innerHeight = document.getElementById('displayDetails').clientHeight;
-				});
+
 				// Create unload event if the user closes the window in any way.
-				window.addEventListener('unload', function onUnload(){
+				window.addEventListener("unload", function onUnload(){
 					boycottPlus.newCampaign = false;
-					window.removeEventListener('unload', onUnload, true);
+					window.removeEventListener("load", onUnload, true);
 				});
 				
 				function clone(obj) {
@@ -66,10 +64,10 @@
 					var address = boycottPlus.newBoycottJSON.source;
 					var JSON = boycottPlus.newBoycottJSON.JSON;
 					var nueva = { "domainToCompanies" : { }, "tracked" : { } };
-
+									
 					var boycott = clone(JSON);
 					
-					var companies = boycott.company;
+					var companies = clone(boycott.company);
 					
 					delete boycott.company;
 										
@@ -84,10 +82,10 @@
 						
 						for (var j in domains) {
 							if (!domains.hasOwnProperty(j)) { continue; }
-							var tmp = companies[i];
+							var tmp = clone(companies[i]);
 							
 							tmp._src = address;
-							tmp._boycott = boycott;
+							tmp._boycott = clone(boycott);
 							tmp._boycott.notificationType = boycottplus.prefs.getCharPref('notificationType');
 							
 							if (nueva.domainToCompanies[domains[j]]) {
@@ -98,22 +96,17 @@
 						}
 					}
 					companies = nueva.domainToCompanies;
-					
-					var allowUpdate = false;
 				} else {
 					// Get the Selected Campaign.
-					var address = boycottPlus.selectedCampaign;
+					var address = boycottPlus.selectedCampaign.getAttribute('address');
 					var JSON = boycottPlus.data._data.tracked[address];
 					var companies = boycottPlus.data._data.domainToCompanies;
-
-					var allowUpdate = true;
 				}
 
 				var bound = this;
 				
 				var title = document.getAnonymousElementByAttribute(bound, 'id', 'title');
-					var texto = document.createTextNode(JSON.name);
-				title.appendChild(texto);
+				title.setAttribute('value', JSON.name);
 				
 				var displayChanges = document.getAnonymousElementByAttribute(bound, 'id', 'displayChanges');
 				displayChanges.setAttribute('checked', JSON.displayChanges);
@@ -136,33 +129,10 @@
 					}
 				
 				var arrayTemp = [];
-				
-				var update_box = document.getAnonymousElementByAttribute(bound, 'class', 'update_box');
-				
-				// Change value of lastUpdated label.
-				changeLastUpdated = function(jsonDate) {
-					var date = null;
-					var lastUpdated = document.createElement('label');
-						lastUpdated.setAttribute('id', 'lastUpdated');
-						if ( typeof jsonDate == 'undefined' ) {
-							date = new Date();
-						} else {
-							date = new Date(jsonDate * 1000);
-						}
-						lastUpdated.setAttribute('value', 'Last Updated: '+ ((date.getMonth()+1) < 10 ? '0' : '') + (date.getMonth()+1) + '/' + (date.getDate() < 10 ? '0' : '') + date.getDate() + '/' + date.getFullYear());
-					update_box.appendChild(lastUpdated);
-				};
-				
-				if ( allowUpdate ) {
-					changeLastUpdated(JSON.locallyUpdated);
 
-					var update = document.createElement('button');
-						update.setAttribute('id', 'update');
-						update.setAttribute('label', 'Update Now');
-						update.setAttribute('oncommand', 'boycottplus.doUpdate("'+address+'", true);window.close();/*changeLastUpdated();*/');
-					
-					update_box.appendChild(update);
-				}
+				var lastUpdated = document.getAnonymousElementByAttribute(bound, 'id', 'lastUpdated');
+					var fecha = new Date(JSON.updatedDate * 1000);
+					lastUpdated.setAttribute('value', 'Last Updated: '+ fecha.getDate() + '/' + fecha.getMonth() + '/' + fecha.getFullYear());
 				
 				var campaignsBox = document.getAnonymousElementByAttribute(bound, 'id', 'companiesDetails');
 					for(var company in companies) {
@@ -183,18 +153,16 @@
 								if ( sameCompany ) continue;
 
 								var companyBox = document.createElement('vbox');
-
+									
 									var titleBox = document.createElement('hbox');
-										titleBox.classList.add('companyTitle');
 										var collapseExpand = document.createElement('label');
 											collapseExpand.setAttribute('value', '+');
 											collapseExpand.setAttribute('width', '10px');
 											collapseExpand.setAttribute('onclick', 'changeCollapseExpand(this);');
 											
-										var companyName = document.createElement('description');
-											var texto = document.createTextNode(thisCompany.companyName);
-										companyName.appendChild(texto);
-																		
+										var companyName = document.createElement('label');
+										companyName.setAttribute('value', thisCompany.companyName);
+										
 										var companyRuleCount = document.createElement('label');
 										
 										var ruleCount = 0;
@@ -207,23 +175,20 @@
 											
 											ruleCount++;
 										});
-										ruleList.classList.add('ruleList');
-										companyRuleCount.setAttribute('value', '[' + ruleCount + ' Boycott Rules]');
+										companyRuleCount.setAttribute('value', ruleCount + ' Boycott Rules');
 										
 										var learnMore = document.createElement('label');
 										learnMore.classList.add('text-link');
-										learnMore.setAttribute('value', '[Learn more]');
-										learnMore.setAttribute('onclick', 'boycottplus.newTab("'+thisCompany.learnMore+'", true)');
+										learnMore.setAttribute('value', 'Learn more.');
+										learnMore.setAttribute('onclick', 'boycottplus.newTab("'+thisCompany.learnMore+'")');
 										
 									titleBox.appendChild(collapseExpand);
 									titleBox.appendChild(companyName);
 									titleBox.appendChild(companyRuleCount);
-									if ( thisCompany.learnMore != '' ) { titleBox.appendChild(learnMore); };
+									if (thisCompany.learnMore!=''){ titleBox.appendChild(learnMore); };
 									
-									var companyEvidence = document.createElement('description');
-										var texto = document.createTextNode(thisCompany.causeEvidence);
-									companyEvidence.appendChild(texto);
-									companyEvidence.classList.add('companyEvidence');
+									var companyEvidence = document.createElement('label');
+										companyEvidence.setAttribute('value', thisCompany.causeEvidence);
 		
 									var companyCauseDetails = document.createElementNS(htmlNS , 'ul');
 										thisCompany.causeDetail.forEach(function(detail) {
@@ -231,17 +196,14 @@
 												var causeText = document.createTextNode(detail);
 												details.appendChild(causeText);
 											companyCauseDetails.appendChild(details);
-											companyCauseDetails.classList.add('companyCauseDetails');
 										});	
 										
 									var ruleBox = document.createElement('vbox');
 										ruleBox.setAttribute('hideBox', '');
 										ruleBox.classList.add('ruleHide');
-										ruleBox.classList.add('ruleBox');
 									
 										var rulesLabel = document.createElement('label');
 											rulesLabel.setAttribute('value', 'Rules for this Company');
-											rulesLabel.classList.add('rulesLabel');
 										
 									ruleBox.appendChild(rulesLabel);
 									ruleBox.appendChild(ruleList);
@@ -273,23 +235,22 @@
 				
 				var buttonsBox = document.getAnonymousElementByAttribute(bound, 'id', 'buttonsBox');
 				
-				// Display buttons.
 				if (boycottPlus.newCampaign) {
-					var bApplySubscribe = document.createElement('button');
-						bApplySubscribe.setAttribute('label', 'Apply & Subscribe');
-						bApplySubscribe.setAttribute('oncommand', 'boycottplus.doSubscribe();doCampaignDetailsChanges();window.close();');
+					var bApplySuscribe = document.createElement('button');
+						bApplySuscribe.setAttribute('label', 'Apply & Suscribe');
+						bApplySuscribe.setAttribute('oncommand', 'boycottplus.doSuscribe();doCampaignDetailsChanges();window.close();');
 						
-					buttonsBox.appendChild(bApplySubscribe);
+					buttonsBox.appendChild(bApplySuscribe);
 				} else {
-					var bUnsubscribe = document.createElement('button');
-					bUnsubscribe.setAttribute('label', 'Unsubscribe');
-					bUnsubscribe.setAttribute('oncommand', 'boycottplus.doUnsubscribe("'+address+'");window.close();');
+					var bUnsuscribe = document.createElement('button');
+					bUnsuscribe.setAttribute('label', 'Unsuscribe');
+					bUnsuscribe.setAttribute('oncommand', 'boycottplus.doUnsuscribe("'+address+'");window.close();');
 					
 					var bApply = document.createElement('button');
 						bApply.setAttribute('label', 'Apply');
 						bApply.setAttribute('oncommand', 'doCampaignDetailsChanges();window.close();');
 						
-					buttonsBox.appendChild(bUnsubscribe);
+					buttonsBox.appendChild(bUnsuscribe);
 					buttonsBox.appendChild(bApply);
 				}
 
@@ -298,9 +259,9 @@
 					bCancel.setAttribute('oncommand', 'window.close();');
 				
 				buttonsBox.appendChild(bCancel);
-				
+					
 				// Change value of CollapseExpand label.
-				changeCollapseExpand = function(el) {
+				changeCollapseExpand = function (el) {
 					el.parentNode.parentNode.querySelector("vbox").classList.toggle("ruleHide");
 					if (el.parentNode.parentNode.querySelector("vbox").classList.contains("ruleHide")) {
 						el.setAttribute('value', '+');
@@ -312,7 +273,7 @@
 				// Apply Changes.
 				doCampaignDetailsChanges = function() {
 					boycottplus.setDisplayChanges(address, displayChanges.hasAttribute("checked"));
-					boycottplus.setSiteUpdateFrecuency(address , frecuency.selectedItem.value);
+					boycottplus.setSiteupdateFrecuency(address , frecuency.selectedItem.value);
 					boycottplus.setSiteNotificationType(address, notificationType.selectedItem.value);
 				};				
 

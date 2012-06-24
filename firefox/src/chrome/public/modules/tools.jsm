@@ -34,7 +34,7 @@ var tools = {
     
     _wm : Components.classes["@mozilla.org/appshell/window-mediator;1"]
                     .getService(Components.interfaces.nsIWindowMediator),
-    
+    /*
     openManager : function () {
         var currentManager = tools._wm.getMostRecentWindow("boycottplus:manager");
         if (currentManager) {
@@ -49,16 +49,18 @@ var tools = {
 				null);
         }
     },
+	*/
 	openCampaignDetails : function () {
 		var currentManager = tools._wm.getMostRecentWindow("boycottplus:detail");
         if (currentManager) {
             currentManager.focus();
             return currentManager;
         } else {
-            return tools._ww.openWindow(null,
-				'chrome://boycottplus/content/campaignDetailsUI/campaign_detail.xul',
+			var parentWindow = tools._wm.getMostRecentWindow('navigator:browser');
+            return tools._ww.openWindow(parentWindow,
+				'chrome://boycottplus/content/campaignDetailUI/campaign_detail.xul',
 				'boycottPlusDetailWindow',
-				'height=600,width=520,dialog,resizable=no,alwaysRaised,modal,chrome,centerscreen,titlebar,dependent',
+				'height=620,width=600,resizable=no,alwaysRaised=yes,chrome=yes,centerscreen=yes,titlebar=yes,modal=yes',
 				null);
         }
 	},

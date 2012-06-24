@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
+  <binding id="manager">
+    <content>
+	
+		<xul:vbox width="450">
+			<xul:groupbox>
+				<xul:grid class="displayManagerTree">
+					<xul:columns>
+						<xul:column />
+						<xul:column />
+						<xul:column flex="1" />
+					</xul:columns>
+					<xul:rows height="165">
+					<!-- List of Boycotts here -->
+					</xul:rows>
+				</xul:grid>
+			</xul:groupbox>
+			<xul:vbox id="box_details">
+				<xul:description class="title" />
+				<xul:hbox align="baseline">
+					<xul:label class="lastUpdated" value="" />
+					<xul:button id="update" label="Update Now" />
+				</xul:hbox>
+				<xul:hbox class="details_buttons" align="baseline" flex="1">
+					<xul:button label="Campaign Detail" oncommand="document.getElementById('boycottToolbarPopup').hidePopup();boycottPlus.tools.openCampaignDetails();" />
+					<xul:hbox flex="1" pack="center"><xul:hbox><xul:label id="sponsorUrl" class="text-link" value="Visit campaign sponsor website" /></xul:hbox></xul:hbox>
+					<xul:button id="unsubscribe" label="Unsubscribe" />
+				</xul:hbox>
+			</xul:vbox>
+			<xul:hbox class="box_general">
+				<xul:image src="chrome://boycottplus/skin/icon20.png" height="20" width="20" />
+				<xul:label class="text-link" onclick="document.getElementById('boycottToolbarPopup').hidePopup(); boycottplus.newTab('www.boycottplus.org', true)" value="BoycottPlus v1.0" />
+				<xul:hbox pack="end" flex="1">
+					<xul:button label="Browser Campaigns" oncommand="document.getElementById('boycottToolbarPopup').hidePopup(); boycottplus.newTab('www.boycottplus.org', true)" />
+					<xul:button id="updateAll" label="Update All" />
+				</xul:hbox>
+			</xul:hbox>
+		</xul:vbox>
+		
+    </content>
+    <implementation>
+    	
+      <constructor><![CDATA[
+		Components.utils.import('resource://boycottplus/modules/boycottplus.jsm');
+		
+		var bound = this;
+
+		var updateAll = document.getElementById('updateAll');
+			updateAll.setAttribute('oncommand', 'boycottplus.doUpdateAll();changeDetails(true)');
+		
+		var grid = document.getAnonymousElementByAttribute(bound, 'class', 'displayManagerTree');
+		var rows = grid.querySelector("rows");
+
+		var box_details = document.getAnonymousElementByAttribute(bound, 'id', 'box_details');
+/*
+		var popup = document.getElementById('boycottToolbarButton');
+		popup.addEventListener("click", function() {			
+			boycottPlus.selectedCampaign = null;
+			box_details.setAttribute('style', 'display: none;');
+			while (rows.firstChild) {
+			  rows.removeChild(rows.firstChild);
+			}
+			
+			bound.refreshList();
+			
+		}, true);
+*/		
+		
+		var popup = document.getElementById('boycottToolbarPopup');
+		popup.addEventListener('popupshowing', function(e){
+			if (e.eventPhase == e.AT_TARGET) {
+				boycottPlus.selectedCampaign = null;
+				box_details.setAttribute('style', 'display: none;');
+				while (rows.firstChild) {
+				  rows.removeChild(rows.firstChild);
+				}
+				
+				bound.refreshList();
+			}
+		}, true);
+	
+        bound.refreshList = function () {
+		
+            var items = [];
+            var tracked = boycottPlus.data._data.tracked;
+			
+            for (var i in tracked) {
+                if (!tracked.hasOwnProperty(i)) {
+                    continue;
+                }
+                items.push([i, tracked[i].name, tracked[i].locallyUpdated, tracked[i].notificationType, tracked[i].sponsorUrl]);
+            }
+			
+            items.forEach(function(i) {
+				// Create each row
+				var row = document.createElement("row");
+				// Add attributes to row for dynamic info and unsubscribe later.
+				row.setAttribute('address', i[0]);
+				row.setAttribute('lastUpdated', i[2]);
+				row.setAttribute('sponsorUrl', i[4]);
+				row.setAttribute('align', 'baseline');
+				
+				// On Click, remove class and attribute selected from old element and add it to the new one.
+				row.addEventListener('click', function() {
+					var selected = rows.querySelectorAll('.selected');
+					
+					for(var i = 0; i < selected.length; i++) {
+						var eachRow = selected.item(i);
+						if ( eachRow.hasAttribute('selected') ) {
+							eachRow.classList.remove('selected');
+							eachRow.removeAttribute('selected');
+						}
+					}
+					this.setAttribute('selected', '');
+					this.classList.add('selected');
+					boycottPlus.selectedCampaign = this.getAttribute('address');
+										
+					// Update the grouBox_details with the new selected item´s details.
+					var detail_box = document.getElementById('box_details');
+					
+					var title = detail_box.querySelectorAll('.title');
+					for(var i = 0; i < title.length; i++) {
+						var title = title.item(i);
+							while(title.firstChild) {
+								title.removeChild(title.firstChild);
+							}
+							var texto = document.createTextNode(this.querySelector('.title').firstChild.nodeValue);
+						title.appendChild(texto);
+					}
+					
+					var lastUpdated = detail_box.querySelectorAll('.lastUpdated');
+					for(var i = 0; i < lastUpdated.length; i++) {
+						var lastUpdated = lastUpdated.item(i);
+						var date = new Date(this.getAttribute('lastUpdated') * 1000);
+						lastUpdated.setAttribute('value', 'Last Updated: '+ ((date.getMonth()+1) < 10 ? '0' : '') + (date.getMonth()+1) + '/' + (date.getDate() < 10 ? '0' : '') + date.getDate() + '/' + date.getFullYear());
+					}
+					
+					var unsubscribe = document.getElementById('unsubscribe');
+						unsubscribe.setAttribute('oncommand', 'boycottplus.doUnsubscribe("'+row.getAttribute('address')+'")');
+						
+					var update = document.getElementById('update');
+						update.setAttribute('oncommand', 'boycottplus.doUpdate("'+row.getAttribute('address')+'", true);changeDetails(false)');
+						
+					var sponsorUrl = document.getElementById('sponsorUrl');
+						sponsorUrl.setAttribute('onclick', 'document.getElementById("boycottToolbarPopup").hidePopup();boycottplus.newTab("'+row.getAttribute('sponsorUrl')+'", true);');
+						
+					var box_details = document.getElementById('box_details');
+						box_details.setAttribute('style', 'display: block;');
+						
+				}, false);
+
+				// Menu list
+				var menuitem1 = document.createElement("menuitem");
+				menuitem1.setAttribute('label', 'Disabled');
+				menuitem1.setAttribute('value', '0');
+				menuitem1.setAttribute('closemenu', 'single');
+
+				var menuitem2 = document.createElement("menuitem");
+				menuitem2.setAttribute('label', 'Notify');
+				menuitem2.setAttribute('value', '1');
+				menuitem2.setAttribute('closemenu', 'single');
+
+				var menuitem3 = document.createElement("menuitem");
+				menuitem3.setAttribute('label', 'Banned');
+				menuitem3.setAttribute('value', '2');
+				menuitem3.setAttribute('closemenu', 'single');
+				
+				switch (i[3]) {
+					case '0':
+						menuitem1.setAttribute('selected', 'true');
+						var bulletImage = 'chrome://boycottplus/skin/bullet_black.png';
+						break;
+					case '1':
+						menuitem2.setAttribute('selected', 'true');
+						var bulletImage = 'chrome://boycottplus/skin/bullet_yellow.png';
+						break;
+					case '2':
+						menuitem3.setAttribute('selected', 'true');
+						var bulletImage = 'chrome://boycottplus/skin/bullet_red.png';
+						break;
+				}
+				
+				var menupopup = document.createElement("menupopup");
+				menupopup.appendChild(menuitem1);
+				menupopup.appendChild(menuitem2);
+				menupopup.appendChild(menuitem3);
+				menupopup.setAttribute('position', 'after_end');
+				
+
+				var menulist = document.createElement("menulist");
+				menulist.appendChild(menupopup);
+				menulist.setAttribute('oncommand', 'boycottplus.setSiteNotificationType("'+i[0]+'", this.selectedItem.value);changeBullet(this.selectedItem.value, this.parentNode);');	
+
+				// Bullet
+				var bullet = document.createElement("image");
+				bullet.setAttribute('src', bulletImage);
+				bullet.setAttribute('class', 'bullet');
+				bullet.setAttribute('width', 16);
+				bullet.setAttribute('height', 16);
+
+				// Campaign name
+				var title = document.createElement("description");
+					var texto = document.createTextNode(i[1]);
+				title.appendChild(texto);
+				title.classList.add('title');
+				
+				// Append elements to the row
+				row.appendChild(menulist);
+				row.appendChild(bullet);
+				row.appendChild(title);
+				
+				// Append the row to the grid
+				rows.appendChild(row);
+            });
+			
+			// Change the bullet color.
+			changeBullet = function (value, row) {
+				switch (value) {
+					case '0':
+						var bulletImage = 'chrome://boycottplus/skin/bullet_black.png';
+						break;
+					case '1':
+						var bulletImage = 'chrome://boycottplus/skin/bullet_yellow.png';
+						break;
+					case '2':
+						var bulletImage = 'chrome://boycottplus/skin/bullet_red.png';
+						break;
+				}
+				var allBullet = row.querySelectorAll('.bullet');
+				allBullet.item(0).setAttribute('src', bulletImage);
+			};
+			
+			// Change Row details and detail_box info.
+			changeDetails = function(updateAll) {
+				if ( updateAll ) {
+					// Refresh each row.
+					var allRows = rows.querySelectorAll('row');
+					
+					for(var i = 0; i < allRows.length; i++) {
+						var eachRow = allRows.item(i);
+						
+						var boycottDetails = boycottPlus.data._data.tracked[eachRow.getAttribute('address')];
+										
+						var title = eachRow.querySelectorAll('.title').item(0);
+							while(title.firstChild) {
+								title.removeChild(title.firstChild);
+							}
+							var texto = document.createTextNode(boycottDetails.name);
+						title.appendChild(texto);
+						
+						eachRow.setAttribute('lastUpdated', boycottDetails.locallyUpdated);
+					}
+					
+				} else {
+					var selected = rows.querySelectorAll('.selected').item(0);
+					
+					var boycottDetails = boycottPlus.data._data.tracked[selected.getAttribute('address')];
+										
+					var title = selected.querySelectorAll('.title').item(0);
+						title.removeChild(title.firstChild);
+						
+						var texto = document.createTextNode(boycottDetails.name);
+					title.appendChild(texto);
+					
+					selected.setAttribute('lastUpdated', boycottDetails.locallyUpdated);	
+					
+					var box_details = document.getElementById('box_details');
+						var detail_title = box_details.querySelectorAll('.title').item(0);
+								detail_title.removeChild(detail_title.firstChild);
+								
+							var texto = document.createTextNode(boycottDetails.name);
+						detail_title.appendChild(texto);
+						
+						var detail_lastUpdated = box_details.querySelectorAll('.lastUpdated').item(0);
+							var date = new Date(boycottDetails.locallyUpdated * 1000);
+							detail_lastUpdated.setAttribute('value', 'Last Updated: '+ ((date.getMonth()+1) < 10 ? '0' : '') + (date.getMonth()+1) + '/' + (date.getDate() < 10 ? '0' : '') + date.getDate() + '/' + date.getFullYear());
+				}
+			};
+			
+        };
+		
+		bound.eventListener = function (subject, topic, data) {
+            if (subject === "SourceRemoved") {
+                bound.removeSource();
+            }
+        };
+		
+        bound.removeSource = function () {
+			var selected = rows.querySelectorAll('.selected');
+			for(var i = 0; i < selected.length; i++) {
+				var eachRow = selected.item(i);
+				rows.removeChild(eachRow);
+				boycottPlus.selectedCampaign = null;
+			}
+        };
+        
+        bound.observerHandle = boycottPlus.tools.addObserver(bound.eventListener, "event");
+
+		
+      ]]></constructor>
+	  
+      <destructor><![CDATA[
+        boycottPlus.tools.removeObserver(this.observerHandle);
+      ]]></destructor>
+      
+    </implementation>
+    
+  </binding>
+</bindings>

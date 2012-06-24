@@ -18,7 +18,7 @@ TheComponent.prototype = {
             return ACCEPT;
         }
         
-        if (location.scheme === "boycottplus") {
+        if (location.scheme === "boycottplus" || location.scheme === "grupovrs") {
             boycottPlus.tools.broadcast("opened", "URL", "http://" + location.host + location.path);
             return REJECT_OTHER;
         }

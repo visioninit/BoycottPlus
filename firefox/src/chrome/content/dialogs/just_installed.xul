@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
-<dialog
-	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-	id="dms-clearconfirm"
-	buttons="accept,cancel"
-	defaultButton="cancel"
-	buttonlabelaccept="Yes"
-	buttonlabelcancel="No"
-	title="Thanks for installing Boycottplus!"
-	ondialogaccept="opener.boycottplus.justInstalled(this);"
->
-	<description style="margin-bottom:10px;max-width:300px;">
-		Do you want to visit our site for more information about campaigns?
-	</description>
+<?xml-stylesheet href="chrome://boycottplus/content/dialogs/just_installed.css" type="text/css"?>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="just_installed" buttons="accept,cancel" defaultButton="cancel" buttonlabelaccept="Yes" buttonlabelcancel="No" title="Thanks for installing Boycottplus!" ondialogaccept="opener.boycottplus.justInstalled(this);">
+	<hbox>
+		<image src="chrome://boycottplus/skin/icon48.png" height="48" width="48" style="margin-right: 30px;" />
+		<description style="margin-bottom:10px;max-width:100%;margin-top: 10px;">
+			Do you want to visit our site for more information about campaigns?
+		</description>
+	</hbox>
 </dialog>

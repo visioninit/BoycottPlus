@@ -1,0 +1,48 @@
+.displayManagerTree {
+
+}
+	rows {
+		overflow: auto;
+	}
+		row .bullet {
+			margin-top: 8px !important;
+		}
+		row.selected {
+			background-color: #CCC;
+			-moz-border-radius: 5px;
+		}
+#box_details, .box_general {
+	background-color: #CCC;
+	-moz-border-radius: 5px;
+	margin: 3px;
+}
+#box_details {
+	padding: 3px;
+	display: none;
+}
+	#box_details .lastUpdated {
+		min-width: 140px;
+		margin-right: 0;
+	}
+	#box_details .title {
+		font-weight: bold;
+		display: block;
+	}
+	#box_details .text-link, .box_general .text-link {
+		text-decoration: none;
+	}#box_details .text-link:hover, .box_general .text-link:hover {
+		text-decoration: underline;
+	}
+	#box_details .details_buttons {
+		width: 100%;
+	}
+	.box_general .text-link {
+		color: #1A20A5 !important;
+		margin-top: 6px;
+		margin-left: -3px;
+	}
+	.box_general > image {
+		margin: 6px;
+	}
+	
+	

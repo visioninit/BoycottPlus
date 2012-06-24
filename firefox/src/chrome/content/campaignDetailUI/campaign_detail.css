@@ -1,0 +1,82 @@
+#displayDetails {
+  -moz-box-flex: 1;
+  -moz-binding: url("chrome://boycottplus/content/widgets/campaign_detail.xbl#boycottPlusDetail");
+}
+
+#container_box {
+	background-color: #CCC;
+	padding: 5px 10px;
+}
+	#title {
+		font-size: 15px;
+	}
+	#visitSite {
+		text-decoration: none;
+		font-size: 14px;
+	}#visitSite:hover {
+		text-decoration: underline;
+	}
+	#displayChanges {
+		margin-left: 15px;
+	}
+	.update_box {
+		height: 30px;
+		margin-bottom: 5px;
+	}
+		.update_box label.frecuency, .update_box #lastUpdated {
+			font-size: 14px;
+		}
+		.update_box #lastUpdated {
+			margin-left: 15px;
+			min-width: 160px;
+			margin-right: 0;
+		}
+	#companiesDetails {
+		background-color: #FFF;
+		overflow: auto;
+		margin-bottom: 10px;
+		padding: 10px 3px;
+	}
+		#companiesDetails .companyTitle, .ruleBox .rulesLabel {
+			font-weight: bold;
+		}
+			#companiesDetails .text-link {
+				text-decoration: none;
+				font-weight: normal;
+				margin: 0;
+			}#companiesDetails .text-link:hover {
+				text-decoration: underline;
+			}
+			#companiesDetails .companyEvidence {
+				margin-left: 30px;
+			}
+			#companiesDetails .companyCauseDetails {
+				margin-left: 30px;
+				margin-top: 3px;
+			}
+			#companiesDetails .ruleBox {
+				margin-left: 25px;
+				margin-top: 3px;
+			}
+			#companiesDetails .ruleBox.ruleHide {
+				display: none;
+			}
+				#companiesDetails .ruleBox .ruleList {
+					list-style: none;
+					margin-top: 3px;
+					margin-bottom: 15px;
+					margin-left: -10px;
+				}
+	.title_degree {
+		font-size: 14px;
+	}
+	#buttonsBox {
+		margin-top: 20px;
+	}
+		#buttonsBox button {
+			margin-left: 15px;
+		}
+	
+	
+	
+	

@@ -1,27 +1,26 @@
 #boycottToolbarButton {
-  list-style-image: url("chrome://boycottplus/skin/icon20.png");
+	list-style-image: url("chrome://boycottplus/skin/icon20.png");
 }
 
 #boycottToolbarButton:hover {
-  list-style-image: url("chrome://boycottplus/skin/icon20.png");
+	list-style-image: url("chrome://boycottplus/skin/icon20.png");
 }
 
 toolbar[iconsize="small"] #boycottToolbarButton {
-  list-style-image: url("chrome://boycottplus/skin/icon16.png");
+	list-style-image: url("chrome://boycottplus/skin/icon16.png");
 }
 
 toolbar[iconsize="small"] #boycottToolbarButton:hover {
-  list-style-image: url("chrome://boycottplus/skin/icon16.png");
+	list-style-image: url("chrome://boycottplus/skin/icon16.png");
 }
 
-#boycottToolbarDisplayWidget {
-  -moz-box-flex: 1;
-  -moz-binding: url("chrome://boycottplus/content/widgets/display.xbl#widget");
+#boycottToolbarDisplayManager {
+	-moz-box-flex: 1;
+	-moz-binding: url("chrome://boycottplus/content/widgets/manager.xbl#manager");
 }
 
 .boycottToolbarBody {
     width: 450px;
-    height: 250px;
 }
 
 .boycottToolbarBody * {

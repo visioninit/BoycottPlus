@@ -73,7 +73,7 @@ var data = {
 					boycottPlus.newBoycottJSON.JSON = json;
 					
 					if ( !update ) {
-						//Suscribe
+						//Subscribe
 						tools.openCampaignDetails();
 					}
                 }
@@ -89,7 +89,7 @@ var data = {
 		*/
 		var xhr = new tools.XMLHttpRequest();
 		xhr.open("GET", source, false);
-		xhr.send(null);  
+		xhr.send(null);
   
 		if (xhr.status === 200) {  
 			var json = JSON.parse(xhr.responseText);
@@ -105,7 +105,7 @@ var data = {
 			boycottPlus.newBoycottJSON.JSON = json;
 			
 			if ( !update ) {
-				//Suscribe
+				//Subscribe.
 				tools.openCampaignDetails();
 			}
 		}
@@ -143,9 +143,9 @@ var data = {
     
     saveData : function () {
         Application.prefs.setValue("extensions.boycottplus.data", JSON.stringify(data._data));
-		
+
 		// Needed?
-		//data.restoreData();
+		data.restoreData();
     },
     
     restoreData : function () {

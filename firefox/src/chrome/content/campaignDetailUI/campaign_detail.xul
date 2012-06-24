@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://boycottplus/content/campaignDetailUI/campaign_detail.css" type="text/css"?>
+
+<window oncontextmenu="return false;" id="boycottPlusDetailWindow" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" windowtype="boycottplus:detail" title="BoycottPlus Campaign Detail">
+
+	<script type="application/x-javascript" src="chrome://boycottplus/content/main.js" />
+  
+	<vbox flex="1">
+		<box id="displayDetails" />
+	</vbox>
+
+</window>

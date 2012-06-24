@@ -1,10 +1,10 @@
-var EXPORTED_SYMBOLS = ["bar"];
+var EXPORTED_SYMBOLS = ['bar'];
 
 Components.utils.import("resource://boycottplus/modules/tools.jsm");
 Components.utils.import("resource://boycottplus/modules/data.jsm");
 
 var bar = {
-
+	/*
     onPageLoad : function (ev) {
         var doc = ev.originalTarget;
         var win = doc.defaultView;
@@ -34,31 +34,32 @@ var bar = {
         var companies = tools.findCompanies(data, doc.location.host);
         
         if (companies) {
-			bar._addBar(notification.ownerDocument, notification, companies);
+			bar._addBar(notification.ownerDocument, notification, companies, doc.location.host);
         }
     },
-    
+    */
     _makeBarlet : function (doc, company) {
         var $ = tools.$e.bind(doc, doc);
-        
-        var barlet = $("vbox", {"class" : "boycottBarlet"}, [doc.createTextNode("Boycott " + company.companyName + " for the cause \"" + company._boycott.name + "\"")]);
+        var htmlNS = 'http://www.w3.org/1999/xhtml';
+        var barlet = $('vbox', {'class' : 'boycottBarlet'}, [doc.createTextNode('Boycott ' + company.companyName + ' for the cause \'' + company._boycott.name + '\'')]);
         if (company.causeDetail.length) {
-            var ul = doc.createElementNS("http://www.w3.org/1999/xhtml", "ul");
+            var ul = doc.createElementNS(htmlNS, 'ul');
             company.causeDetail.forEach(function (text) {
-                var li = doc.createElementNS("http://www.w3.org/1999/xhtml", "li");
+                var li = doc.createElementNS(htmlNS, 'li');
                 li.appendChild(doc.createTextNode(text));
                 ul.appendChild(li);
             });
+			//ul.setAttribute('style', 'display:none;');
             barlet.appendChild(ul);
         }
         
         return barlet;
     },
     
-    _addBar : function (doc, notification, companies, gBrowser) {	
+    _addBar : function (doc, notification, companies, gBrowser, url) {
         var $ = tools.$e.bind(doc, doc);
         
-        var currentBar = notification.querySelector(".boycottBar");
+        var currentBar = notification.querySelector('.boycottBar');
         if (currentBar) {
             currentBar.parentNode.removeChild(currentBar);
         }
@@ -68,23 +69,25 @@ var bar = {
             barlets.push(this._makeBarlet(doc, companies[i]));
         }
         
-        var bar = $("hbox", {"class" : "boycottBar"}, [
-            $("vbox", {"class" : "boycottImageContainer"}, [
-                $("image", {"class" : "boycottImage", "src" : "chrome://boycottplus/skin/icon32.png"})
+        var bar = $('hbox', {'class' : 'boycottBar'}, [
+            $('vbox', {'class' : 'boycottImageContainer'}, [
+                $('image', {'class' : 'boycottImage', 'src' : 'chrome://boycottplus/skin/icon32.png'})
             ]),
-            $("vbox", {"class" : "boycottBarletContainer"}, barlets),
-            $("vbox", {"class" : "boycottCloseContainer"}, [
-                $("image", {"class" : "boycottClose", "src" : "chrome://boycottplus/skin/close12.png"})
+            $('vbox', {'class' : 'boycottBarletContainer'}, barlets),
+            $('vbox', {'class' : 'boycottCloseContainer'}, [
+                $('image', {'class' : 'boycottClose', 'src' : 'chrome://boycottplus/skin/close12.png'})
             ])
         ]);
         
         notification.insertBefore(bar, notification.firstChild);
-        
-        notification.querySelector(".boycottClose").addEventListener("click", function () {
-			gBrowser.selectedBrowser.setAttribute('boycottPlus_allow', 'true');
-            var bar = notification.querySelector(".boycottBar");
-            bar.parentNode.removeChild(bar);
+		
+        notification.querySelector('.boycottClose').addEventListener('click', function () {
+			Components.utils.import("resource://boycottplus/modules/boycottplus.jsm");
 			
+			boycottPlus.allowed.push(url);
+			
+            var bar = notification.querySelector('.boycottBar');
+            bar.parentNode.removeChild(bar);
         }, true);
     },
 };

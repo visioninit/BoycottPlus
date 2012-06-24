@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<overlay id="boycottplus-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <script src="main.js" />
+    <script src="exit.js" />
+ 
+	<!-- Is this needed? -->
+	<menupopup id="menu_ToolsPopup">
+        <menuitem id="boycottPlusMenuItem" label="BoycottPlus" oncommand="boycottPlus.tools.openManager();" />
+    </menupopup>
+	<!-- /Is this needed? -->
+
+</overlay>
